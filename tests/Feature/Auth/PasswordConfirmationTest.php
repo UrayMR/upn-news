@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
+use App\Domains\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -19,8 +19,9 @@ class PasswordConfirmationTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertInertia(fn (Assert $page) => $page
-            ->component('auth/confirm-password')
+        $response->assertInertia(
+            fn(Assert $page) => $page
+                ->component('auth/confirm-password')
         );
     }
 

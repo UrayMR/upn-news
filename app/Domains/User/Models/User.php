@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Domains\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +13,27 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory, HasUuids, Notifiable, TwoFactorAuthenticatable;
+
+    /**
+     * The factory class for the model.
+     *
+     * @var class-string<\Illuminate\Database\Eloquent\Factories\Factory>
+     */
+    protected static $factory = \Database\Factories\UserFactory::class;
+
+    /**
+     * User role constants.
+     */
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_EDITOR = 'editor';
+    public const ROLE_WRITER = 'writer';
+
+    /**
+     * User status constants.
+     */
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +44,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone_number',
+        'profile_picture_path',
+        'status',
     ];
 
     /**

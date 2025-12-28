@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
+use App\Domains\User\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
@@ -49,8 +49,9 @@ class TwoFactorChallengeTest extends TestCase
 
         $this->get(route('two-factor.login'))
             ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page
-                ->component('auth/two-factor-challenge')
+            ->assertInertia(
+                fn(Assert $page) => $page
+                    ->component('auth/two-factor-challenge')
             );
     }
 }
