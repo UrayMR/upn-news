@@ -1,24 +1,24 @@
-FROM php:8.4-fpm
+FROM serversideup/php:8.4-fpm-nginx
 
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    curl \
-    libpng-dev \
-    libzip-dev \
-    libonig-dev \
-    libxml2-dev \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && docker-php-ext-install \
-        pdo_mysql \
-        mbstring \
-        zip \
-        exif \
-        pcntl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Switch to root so we can do root things
+USER root
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install Node.js and npm from the official Node.js image
+COPY --from=node:20 /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:20 /usr/local/lib/node_modules /usr/local/lib/node_modules
 
-WORKDIR /var/www
+# Create symlinks for npm and npx binaries
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+ && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+
+# Install the intl and bcmath extensions for PHP with root permissions 
+RUN install-php-extensions intl bcmath
+
+# Drop back to our unprivileged user
+USER www-data
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy entrypoint scripts
+COPY --chmod=755 ./docker/php/entrypoint.d/ /etc/entrypoint.d/
