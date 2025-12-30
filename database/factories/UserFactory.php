@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Domains\User\Enums\UserRole;
+use App\Domains\User\Enums\UserStatus;
 use App\Domains\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -36,10 +38,10 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'role' => fake()->randomElement([User::ROLE_ADMIN, User::ROLE_EDITOR, User::ROLE_WRITER]),
+            'role' => fake()->randomElement([UserRole::ADMIN->value, UserRole::EDITOR->value, UserRole::WRITER->value]),
             'phone_number' => fake()->phoneNumber(),
             'profile_picture_path' => fake()->imageUrl(),
-            'status' => fake()->randomElement([User::STATUS_ACTIVE, User::STATUS_INACTIVE]),
+            'status' => fake()->randomElement([UserStatus::ACTIVE->value, UserStatus::INACTIVE->value]),
             'remember_token' => Str::random(10),
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),

@@ -4,6 +4,8 @@ namespace App\Domains\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Domains\User\Enums\UserRole;
+use App\Domains\User\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,19 +23,6 @@ class User extends Authenticatable
      * @var class-string<\Illuminate\Database\Eloquent\Factories\Factory>
      */
     protected static $factory = \Database\Factories\UserFactory::class;
-
-    /**
-     * User role constants.
-     */
-    public const ROLE_ADMIN = 'admin';
-    public const ROLE_EDITOR = 'editor';
-    public const ROLE_WRITER = 'writer';
-
-    /**
-     * User status constants.
-     */
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_INACTIVE = 'inactive';
 
     /**
      * The attributes that are mass assignable.
@@ -70,6 +59,8 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'role' => UserRole::class,
+            'status' => UserStatus::class,
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
