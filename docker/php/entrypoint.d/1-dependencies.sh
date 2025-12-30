@@ -21,4 +21,4 @@ else
     npm install
 fi
 
-echo "Dependencies setup completed."
+echo "Dependencies script setup completed."
