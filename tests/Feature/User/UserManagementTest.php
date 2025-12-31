@@ -14,7 +14,7 @@ class UserManagementTest extends TestCase
 {
   use RefreshDatabase;
 
-  public function test_admin_can_create_new_user()
+  public function test_admin_can_store_new_user()
   {
     Storage::fake('public');
 
@@ -40,6 +40,44 @@ class UserManagementTest extends TestCase
     ]);
 
     $createdUser = User::where('email', 'newuser@example.com')->first();
+
+    $this->assertTrue(
+      Storage::disk('public')->exists($createdUser->profile_picture_path),
+      'Profile picture file does not exist in storage.'
+    );
+  }
+
+  public function test_admin_can_update_new_user()
+  {
+    Storage::fake('public');
+
+    $user = User::factory()->create([
+      'role' => UserRole::ADMIN->value
+    ]);
+
+    $createdUser = User::factory()->create([
+      'role' => UserRole::WRITER->value,
+      'email' => 'newuser@example.com',
+    ]);
+
+    $response = $this->actingAs($user)->put(route('users.update', $createdUser->id), [
+      'name' => 'New User',
+      'email' => 'newuser2@example.com',
+      'password' => 'password123',
+      'password_confirmation' => 'password123',
+      'role' => UserRole::WRITER->value,
+      'phone_number' => '081234567890',
+      'status' => UserStatus::ACTIVE->value,
+      'profile_picture_file' => UploadedFile::fake()->image('profile.jpg'),
+    ]);
+
+    $response->assertCreated();
+
+    $this->assertDatabaseHas('users', [
+      'email' => 'newuser2@example.com',
+    ]);
+
+    $createdUser = User::where('email', 'newuser2@example.com')->first();
 
     $this->assertTrue(
       Storage::disk('public')->exists($createdUser->profile_picture_path),

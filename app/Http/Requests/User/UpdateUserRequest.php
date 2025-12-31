@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\User;
 
-use App\Domains\User\DTOs\StoreUserDTO;
+use App\Domains\User\DTOs\UpdateUserDTO;
 use App\Domains\User\Enums\UserRole;
 use App\Domains\User\Enums\UserStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
   /**
    * Get the validation rules that apply to the request.
@@ -20,7 +20,7 @@ class StoreUserRequest extends FormRequest
     return [
       'name' => ['required', 'string', 'max:255'],
       'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-      'password' => ['required', 'string', 'min:8', 'confirmed'],
+      'password' => ['nullable', 'string', 'min:8', 'confirmed'],
       'role' => ['required', 'string', Rule::in(UserRole::creatableByAdminValues())],
       'phone_number' => ['nullable', 'string', 'max:20'],
       'profile_picture_file' => ['nullable', 'image', 'max:2048'],
@@ -31,9 +31,9 @@ class StoreUserRequest extends FormRequest
   /**
    * Convert the request data to a CreateUserDTO.
    */
-  public function toDTO(): StoreUserDTO
+  public function toDTO(): UpdateUserDTO
   {
-    return new StoreUserDTO(
+    return new UpdateUserDTO(
       name: $this->input('name'),
       email: $this->input('email'),
       password: $this->input('password'),

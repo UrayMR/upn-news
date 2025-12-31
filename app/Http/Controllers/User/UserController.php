@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\User;
 
 use App\Domains\User\Models\User;
-use App\Domains\User\Services\CreateUserService;
+use App\Domains\User\Services\StoreUserService;
+use App\Domains\User\Services\UpdateUserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-  public function __construct(protected CreateUserService $createUser) {}
+  public function __construct(
+    protected StoreUserService $createUser,
+    protected UpdateUserService $updateUser
+  ) {}
 
   /**
    * Display a listing of the resource.
@@ -36,7 +41,7 @@ class UserController extends Controller
   {
     Gate::authorize('create', User::class);
 
-    $user = $this->createUser->execute($request->toDTO(), $request->user());
+    $user = $this->createUser->execute($request->toDTO());
 
     return response()->json($user, 201);
   }
@@ -44,7 +49,7 @@ class UserController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(string $id)
+  public function show(User $user)
   {
     //
   }
@@ -52,7 +57,7 @@ class UserController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(string $id)
+  public function edit(User $user)
   {
     //
   }
@@ -60,15 +65,19 @@ class UserController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, string $id)
+  public function update(UpdateUserRequest $request, User $user)
   {
-    //
+    Gate::authorize('update', $user);
+
+    $user = $this->updateUser->execute($request->toDTO(), $user);
+
+    return response()->json($user, 201);
   }
 
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(string $id)
+  public function destroy(User $user)
   {
     //
   }

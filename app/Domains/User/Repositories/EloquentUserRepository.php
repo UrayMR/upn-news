@@ -2,13 +2,14 @@
 
 namespace App\Domains\User\Repositories;
 
-use App\Domains\User\DTOs\CreateUserDTO;
+use App\Domains\User\DTOs\StoreUserDTO;
+use App\Domains\User\DTOs\UpdateUserDTO;
 use App\Domains\User\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class EloquentUserRepository implements UserRepository
 {
-  public function create(CreateUserDTO $dto, ?string $profilePath = null): User
+  public function store(StoreUserDTO $dto, ?string $profilePath = null): User
   {
     return User::create([
       'name' => $dto->name,
@@ -19,5 +20,31 @@ class EloquentUserRepository implements UserRepository
       'profile_picture_path' => $profilePath,
       'status' => $dto->status,
     ]);
+  }
+
+  public function update(UpdateUserDTO $dto, User $user, ?string $profilePath = null): User
+  {
+    $data = [
+      'name' => $dto->name,
+      'email' => $dto->email,
+      'role' => $dto->role,
+      'status' => $dto->status,
+    ];
+
+    if ($dto->password) {
+      $data['password'] = Hash::make($dto->password);
+    }
+
+    if (!is_null($dto->phone_number)) {
+      $data['phone_number'] = $dto->phone_number;
+    }
+
+    if (!is_null($profilePath)) {
+      $data['profile_picture_path'] = $profilePath;
+    }
+
+    $user->update($data);
+
+    return $user;
   }
 }
