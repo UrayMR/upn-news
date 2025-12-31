@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Hash;
 
 class EloquentUserRepository implements UserRepository
 {
+  /**
+   * @param StoreUserDTO $dto
+   * @param string|null $profilePath
+   * @return User
+   */
   public function store(StoreUserDTO $dto, ?string $profilePath = null): User
   {
     return User::create([
@@ -22,6 +27,12 @@ class EloquentUserRepository implements UserRepository
     ]);
   }
 
+  /**
+   * @param UpdateUserDTO $dto
+   * @param User $user (to be updated)
+   * @param string|null $profilePath
+   * @return User
+   */
   public function update(UpdateUserDTO $dto, User $user, ?string $profilePath = null): User
   {
     $data = [
@@ -46,5 +57,14 @@ class EloquentUserRepository implements UserRepository
     $user->update($data);
 
     return $user;
+  }
+
+  /**
+   * @param User $user (to be deleted)
+   * @return bool
+   */
+  public function destroy(User $user): bool
+  {
+    return $user->delete();
   }
 }

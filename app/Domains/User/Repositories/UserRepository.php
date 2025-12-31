@@ -10,4 +10,5 @@ interface UserRepository
 {
   public function store(StoreUserDTO $dto, ?string $profilePath = null): User;
   public function update(UpdateUserDTO $dto, User $user, ?string $profilePath = null): User;
+  public function destroy(User $user): bool;
 }

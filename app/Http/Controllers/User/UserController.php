@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\User;
 
 use App\Domains\User\Models\User;
+use App\Domains\User\Services\DestroyUserService;
 use App\Domains\User\Services\StoreUserService;
 use App\Domains\User\Services\UpdateUserService;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
   public function __construct(
-    protected StoreUserService $createUser,
-    protected UpdateUserService $updateUser
+    protected StoreUserService $storeUser,
+    protected UpdateUserService $updateUser,
+    protected DestroyUserService $destroyUser,
   ) {}
 
   /**
@@ -39,9 +39,9 @@ class UserController extends Controller
    */
   public function store(StoreUserRequest $request)
   {
-    Gate::authorize('create', User::class);
+    $this->authorize('create', User::class);
 
-    $user = $this->createUser->execute($request->toDTO());
+    $user = $this->storeUser->execute($request->toDTO());
 
     return response()->json($user, 201);
   }
@@ -67,7 +67,7 @@ class UserController extends Controller
    */
   public function update(UpdateUserRequest $request, User $user)
   {
-    Gate::authorize('update', $user);
+    $this->authorize('update', $user);
 
     $user = $this->updateUser->execute($request->toDTO(), $user);
 
@@ -79,6 +79,10 @@ class UserController extends Controller
    */
   public function destroy(User $user)
   {
-    //
+    $this->authorize('delete', $user);
+
+    $this->destroyUser->execute($user);
+
+    return response()->json(null, 204);
   }
 }

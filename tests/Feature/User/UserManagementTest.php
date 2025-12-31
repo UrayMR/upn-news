@@ -84,4 +84,33 @@ class UserManagementTest extends TestCase
       'Profile picture file does not exist in storage.'
     );
   }
+
+  public function test_admin_can_destroy_new_user()
+  {
+    Storage::fake('public');
+
+    $user = User::factory()->create([
+      'role' => UserRole::ADMIN->value
+    ]);
+
+    $createdUser = User::factory()->create([
+      'role' => UserRole::WRITER->value,
+      'email' => 'newuser@example.com',
+    ]);
+
+    $createdUserProfilePicturePath = $createdUser->profile_picture_path;
+
+    $response = $this->actingAs($user)->delete(route('users.destroy', $createdUser->id));
+
+    $response->assertNoContent();
+
+    $this->assertDatabaseMissing('users', [
+      'email' => 'newuser@example.com',
+    ]);
+
+    $this->assertFalse(
+      Storage::disk('public')->exists($createdUserProfilePicturePath),
+      'Profile picture file still exists in storage after deletion.'
+    );
+  }
 }
