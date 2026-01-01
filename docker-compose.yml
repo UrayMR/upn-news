@@ -5,13 +5,15 @@ services:
       dockerfile: docker/php/Dockerfile
     environment:
       - SSL_MODE=off
-      - PHP_OPCACHE_ENABLE=0
+      - PHP_OPCACHE_ENABLE=1
+      - PHP_OPCACHE_VALIDATE_TIMESTAMPS=1
+      - PHP_OPCACHE_REVALIDATE_FREQ=0
     ports:
       - 80:8080
       # - 443:8443 # SSL_MODE
       - 5173:5173
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html:cached
     depends_on:
       - mysql
       - redis

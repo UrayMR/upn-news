@@ -5,10 +5,44 @@ namespace App\Domains\User\Repositories;
 use App\Domains\User\DTOs\StoreUserDTO;
 use App\Domains\User\DTOs\UpdateUserDTO;
 use App\Domains\User\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 
 class EloquentUserRepository implements UserRepository
 {
+  /**
+   * @param array $filters (optional: ['search' => '', 'role' => '', 'status' => ''])
+   * @param int $perPage (optional, default 15)
+   * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+   */
+  public function index(array $filters = [], int $perPage = 15): LengthAwarePaginator
+  {
+    $query = User::query();
+
+    // Searching
+    if (!empty($filters['search'])) {
+      $search = $filters['search'];
+      $query->where(function ($q) use ($search) {
+        $q->where('name', 'like', "%$search%")
+          ->orWhere('email', 'like', "%$search%")
+          ->orWhere('phone_number', 'like', "%$search%")
+        ;
+      });
+    }
+
+    // Filter by role
+    if (!empty($filters['role'])) {
+      $query->where('role', $filters['role']);
+    }
+
+    // Filter by status
+    if (!empty($filters['status'])) {
+      $query->where('status', $filters['status']);
+    }
+
+    return $query->orderByDesc('updated_at')->paginate($perPage);
+  }
+
   /**
    * @param StoreUserDTO $dto
    * @param string|null $profilePath

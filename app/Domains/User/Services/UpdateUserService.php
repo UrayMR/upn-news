@@ -4,7 +4,6 @@ namespace App\Domains\User\Services;
 
 use App\Domains\User\DTOs\UpdateUserDTO;
 use App\Domains\User\Models\User;
-use App\Domains\User\Enums\UserRole;
 use App\Domains\User\Repositories\UserRepository;
 
 class UpdateUserService extends UserService

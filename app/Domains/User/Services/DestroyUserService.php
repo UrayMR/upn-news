@@ -2,7 +2,6 @@
 
 namespace App\Domains\User\Services;
 
-use App\Domains\User\DTOs\StoreUserDTO;
 use App\Domains\User\Models\User;
 use App\Domains\User\Repositories\UserRepository;
 
