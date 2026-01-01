@@ -14,8 +14,15 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 # Install the intl and bcmath extensions for PHP with root permissions 
 RUN install-php-extensions intl bcmath
 
-# Drop back to our unprivileged user
-USER www-data
+# Drop back to our unprivileged user (skipping for development purposes)
+# USER www-data
+
+ARG UID=1000
+ARG GID=1000
+
+RUN groupadd -g ${GID} sirbuzz \
+ && useradd -u ${UID} -g ${GID} -m sirbuzz \
+ && chown -R sirbuzz:sirbuzz /var/www
 
 # Set working directory
 WORKDIR /var/www/html

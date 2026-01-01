@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     environment:
+      - PHP_FPM_USER=sirbuzz
+      - PHP_FPM_GROUP=sirbuzz
       - SSL_MODE=off
       - PHP_OPCACHE_ENABLE=1
       - PHP_OPCACHE_VALIDATE_TIMESTAMPS=1

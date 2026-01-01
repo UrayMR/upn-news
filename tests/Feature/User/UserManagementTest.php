@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth;
+namespace Tests\Feature\User;
 
 use App\Domains\User\Enums\UserRole;
 use App\Domains\User\Enums\UserStatus;
