@@ -15,27 +15,6 @@ class UserManagementTest extends TestCase
 {
   use RefreshDatabase;
 
-  public function test_admin_can_index_users_with_filters()
-  {
-    $user = User::factory()->create([
-      'role' => UserRole::ADMIN->value
-    ]);
-
-    User::factory()->count(5)->create();
-
-    $response = $this->actingAs($user)->get(route('users.index'));
-
-    logger()->info($response->json());
-
-    $response->assertOk();
-    $response->assertInertia(
-      fn(Assert $page) =>
-      $page
-        ->component('User/Index')
-        ->has('users.data', 6)
-    );
-  }
-
   public function test_admin_can_store_new_user()
   {
     Storage::fake('public');

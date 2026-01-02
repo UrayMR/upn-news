@@ -21,8 +21,7 @@ ARG UID=1000
 ARG GID=1000
 
 RUN groupadd -g ${GID} sirbuzz \
- && useradd -u ${UID} -g ${GID} -m sirbuzz \
- && chown -R sirbuzz:sirbuzz /var/www
+ && useradd -u ${UID} -g ${GID} -m sirbuzz
 
 # Set working directory
 WORKDIR /var/www/html

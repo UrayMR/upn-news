@@ -31,6 +31,8 @@ class UserController extends Controller
   {
     $this->authorize('viewAny', User::class);
 
+    logger()->info('request', $request->all());
+
     $users = $this->indexUser->execute(
       $request->only(
         [
@@ -43,7 +45,7 @@ class UserController extends Controller
       )
     );
 
-    return Inertia::render('User/Index', [
+    return $this->render('user/index', [
       'users' => UserResource::collection($users),
     ]);
   }
