@@ -7,15 +7,15 @@ use App\Domains\User\Repositories\UserRepository;
 
 class DestroyUserService extends UserService
 {
-  public function __construct(
-    protected UserRepository $users
-  ) {}
+    public function __construct(
+        protected UserRepository $users
+    ) {}
 
-  public function execute(User $user): bool
-  {
-    $this->assertAdminRole();
-    $this->handleDeleteProfilePicture($user->profile_picture_path);
+    public function execute(User $user): bool
+    {
+        $this->assertAdminRole();
+        $this->handleDeleteProfilePicture($user->profile_picture_path);
 
-    return $this->users->destroy($user);
-  }
+        return $this->users->destroy($user);
+    }
 }

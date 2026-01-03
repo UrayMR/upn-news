@@ -9,8 +9,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface UserRepository
 {
-  public function index(array $queryParams = [], int $perPage = 15): LengthAwarePaginator;
-  public function store(StoreUserDTO $dto, ?string $profilePath = null): User;
-  public function update(UpdateUserDTO $dto, User $user, ?string $profilePath = null): User;
-  public function destroy(User $user): bool;
+    public function index(array $queryParams = [], int $perPage = 15): LengthAwarePaginator;
+
+    public function store(StoreUserDTO $dto, ?string $profilePath = null): User;
+
+    public function update(UpdateUserDTO $dto, User $user, ?string $profilePath = null): User;
+
+    public function destroy(User $user): bool;
 }

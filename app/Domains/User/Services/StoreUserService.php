@@ -8,17 +8,17 @@ use App\Domains\User\Repositories\UserRepository;
 
 class StoreUserService extends UserService
 {
-  public function __construct(
-    protected UserRepository $users
-  ) {}
+    public function __construct(
+        protected UserRepository $users
+    ) {}
 
-  public function execute(StoreUserDTO $dto): User
-  {
-    $this->assertAdminRole();
-    $this->assertValidTargetRole($dto->role);
+    public function execute(StoreUserDTO $dto): User
+    {
+        $this->assertAdminRole();
+        $this->assertValidTargetRole($dto->role);
 
-    $profilePath = $this->handleUploadProfilePicture($dto->profile_picture_file);
+        $profilePath = $this->handleUploadProfilePicture($dto->profile_picture_file);
 
-    return $this->users->store($dto, $profilePath);
-  }
+        return $this->users->store($dto, $profilePath);
+    }
 }

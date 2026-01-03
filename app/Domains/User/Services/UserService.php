@@ -9,58 +9,49 @@ use Illuminate\Support\Facades\Storage;
 
 abstract class UserService
 {
-
-  /** 
-   * Assert that the authenticated user has admin role.
-   *
-   * @return void
-   *
-   * @throws \DomainException
-   */
-  protected function assertAdminRole(): void
-  {
-    $authenticatedUser = Auth::user();
-    if ($authenticatedUser->role !== UserRole::ADMIN) {
-      throw new \DomainException('Only admin can perform this action.');
+    /**
+     * Assert that the authenticated user has admin role.
+     *
+     *
+     * @throws \DomainException
+     */
+    protected function assertAdminRole(): void
+    {
+        $authenticatedUser = Auth::user();
+        if ($authenticatedUser->role !== UserRole::ADMIN) {
+            throw new \DomainException('Only admin can perform this action.');
+        }
     }
-  }
 
-  /** 
-   * Assert that the given role is valid for assignment.
-   *
-   * @param  string  $role
-   * @return void
-   *
-   * @throws \DomainException
-   */
-  protected function assertValidTargetRole(UserRole $role): void
-  {
-    if (! in_array($role, UserRole::creatableByAdmin(), true)) {
-      throw new \DomainException('Invalid role to be assigned.');
+    /**
+     * Assert that the given role is valid for assignment.
+     *
+     * @param  string  $role
+     *
+     * @throws \DomainException
+     */
+    protected function assertValidTargetRole(UserRole $role): void
+    {
+        if (! in_array($role, UserRole::creatableByAdmin(), true)) {
+            throw new \DomainException('Invalid role to be assigned.');
+        }
     }
-  }
 
-  /** 
-   * Handle the storage of a profile picture file.
-   *
-   * @param  \Illuminate\Http\UploadedFile|null  $file
-   * @return string|null
-   */
-  protected function handleUploadProfilePicture(?UploadedFile $file): ?string
-  {
-    return $file?->store('profile_pictures');
-  }
-
-  /** 
-   * Handle the deletion of a profile picture file.
-   *
-   * @param  string  $path
-   * @return void
-   */
-  protected function handleDeleteProfilePicture(?string $path): void
-  {
-    if ($path &&  Storage::exists($path)) {
-      Storage::delete($path);
+    /**
+     * Handle the storage of a profile picture file.
+     */
+    protected function handleUploadProfilePicture(?UploadedFile $file): ?string
+    {
+        return $file?->store('profile_pictures');
     }
-  }
+
+    /**
+     * Handle the deletion of a profile picture file.
+     */
+    protected function handleDeleteProfilePicture(?string $path): void
+    {
+        if ($path && Storage::exists($path)) {
+            Storage::delete($path);
+        }
+    }
 }

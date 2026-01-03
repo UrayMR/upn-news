@@ -8,28 +8,24 @@ use App\Domains\User\Repositories\UserRepository;
 
 class UpdateUserService extends UserService
 {
-  public function __construct(
-    protected UserRepository $users
-  ) {}
+    public function __construct(
+        protected UserRepository $users
+    ) {}
 
-  /**
-   * Update the specified user in storage.
-   * 
-   * @param UpdateUserDTO $dto
-   * @param User $user
-   * @return User
-   */
-  public function execute(UpdateUserDTO $dto, User $user): User
-  {
-    $this->assertAdminRole();
-    $this->assertValidTargetRole($dto->role);
+    /**
+     * Update the specified user in storage.
+     */
+    public function execute(UpdateUserDTO $dto, User $user): User
+    {
+        $this->assertAdminRole();
+        $this->assertValidTargetRole($dto->role);
 
-    $profilePath = $this->handleUploadProfilePicture($dto->profile_picture_file);
+        $profilePath = $this->handleUploadProfilePicture($dto->profile_picture_file);
 
-    if ($profilePath) {
-      $this->handleDeleteProfilePicture($user->profile_picture_path);
+        if ($profilePath) {
+            $this->handleDeleteProfilePicture($user->profile_picture_path);
+        }
+
+        return $this->users->update($dto, $user, $profilePath);
     }
-
-    return $this->users->update($dto, $user, $profilePath);
-  }
 }

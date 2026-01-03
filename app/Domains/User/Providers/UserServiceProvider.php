@@ -8,22 +8,22 @@ use Illuminate\Support\ServiceProvider;
 
 class UserServiceProvider extends ServiceProvider
 {
-  /**
-   * Register any application services.
-   */
-  public function register(): void
-  {
-    $this->app->bind(
-      UserRepository::class,
-      EloquentUserRepository::class
-    );
-  }
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        $this->app->bind(
+            UserRepository::class,
+            EloquentUserRepository::class
+        );
+    }
 
-  /**
-   * Bootstrap any application services.
-   */
-  public function boot(): void
-  {
-    //
-  }
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        //
+    }
 }
