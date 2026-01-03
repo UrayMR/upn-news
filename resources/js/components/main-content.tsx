@@ -7,7 +7,11 @@ interface MainContentProps {
 }
 
 function MainContent({ children, className }: MainContentProps) {
-    return <div className={cn(className, 'flex flex-col gap-4 p-4')}>{children}</div>;
+    return (
+        <div className={cn(className, 'flex flex-col gap-4 p-4')}>
+            {children}
+        </div>
+    );
 }
 
 export default MainContent;

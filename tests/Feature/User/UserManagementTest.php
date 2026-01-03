@@ -34,7 +34,7 @@ class UserManagementTest extends TestCase
       'profile_picture_file' => UploadedFile::fake()->image('profile.jpg'),
     ]);
 
-    $response->assertCreated();
+    $response->assertRedirect(route('users.index'));
 
     $this->assertDatabaseHas('users', [
       'email' => 'newuser@example.com',
@@ -72,7 +72,7 @@ class UserManagementTest extends TestCase
       'profile_picture_file' => UploadedFile::fake()->image('profile.jpg'),
     ]);
 
-    $response->assertCreated();
+    $response->assertRedirect(route('users.index'));
 
     $this->assertDatabaseHas('users', [
       'email' => 'newuser2@example.com',
@@ -103,7 +103,7 @@ class UserManagementTest extends TestCase
 
     $response = $this->actingAs($user)->delete(route('users.destroy', $createdUser->id));
 
-    $response->assertNoContent();
+    $response->assertRedirect(route('users.index'));
 
     $this->assertDatabaseMissing('users', [
       'email' => 'newuser@example.com',
