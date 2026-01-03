@@ -9,15 +9,15 @@ import {
     Auth,
     BreadcrumbItem,
     DataTableProps,
+    IUserIndex,
     SearchParams,
     Status,
-    User,
 } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
 interface UsersPageProps {
-    users: DataTableProps<User>;
+    users: DataTableProps<IUserIndex>;
     filters: SearchParams;
     auth: Auth;
 }
@@ -33,7 +33,7 @@ export default function UsersPage() {
             <Head title="Pengguna" />
             <MainContent>
                 <h2 className="mb-4 text-lg font-semibold">Daftar Pengguna</h2>
-                <DataTable<User>
+                <DataTable<IUserIndex>
                     route={users.index()}
                     columns={getUserColumns(props.payload.users.meta)}
                     data={props.payload.users.data}

@@ -52,7 +52,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        return Inertia::render('User/Create');
+        return Inertia::render('user/create');
     }
 
     /**

@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import users from '@/routes/users';
-import { StatusMap, User } from '@/types';
+import { IUserIndex, StatusMap } from '@/types';
 import { Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -10,7 +10,9 @@ interface PaginationMeta {
     per_page: number;
 }
 
-export const getUserColumns = (meta: PaginationMeta): ColumnDef<User>[] => [
+export const getUserColumns = (
+    meta: PaginationMeta,
+): ColumnDef<IUserIndex>[] => [
     {
         accessorKey: 'No',
         header: 'No',

@@ -1,5 +1,5 @@
-import type { User } from './entities/user';
+import type { IUserAuth } from './entities/user';
 
 export interface Auth {
-    user: User;
+    user: IUserAuth;
 }
