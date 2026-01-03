@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Domains\User\Models\User;
-use App\Domains\User\Resources\UserResource;
+use App\Domains\User\Resources\EditUserResource;
+use App\Domains\User\Resources\IndexUserResource;
+use App\Domains\User\Resources\ShowUserResource;
 use App\Domains\User\Services\DestroyUserService;
 use App\Domains\User\Services\IndexUserService;
 use App\Domains\User\Services\StoreUserService;
@@ -39,7 +41,7 @@ class UserController extends Controller
         );
 
         return $this->render('user/index', [
-            'users' => UserResource::collection($users),
+            'users' => IndexUserResource::collection($users),
         ]);
     }
 
@@ -73,7 +75,7 @@ class UserController extends Controller
         $this->authorize('view', $user);
 
         return Inertia::render('User/Show', [
-            'user' => UserResource::make($user),
+            'user' => ShowUserResource::make($user),
         ]);
     }
 
@@ -85,7 +87,7 @@ class UserController extends Controller
         $this->authorize('update', $user);
 
         return Inertia::render('User/Edit', [
-            'user' => $user,
+            'user' => EditUserResource::make($user),
         ]);
     }
 
