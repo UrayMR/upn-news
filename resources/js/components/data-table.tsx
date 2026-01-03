@@ -64,37 +64,31 @@ export function DataTable<TData, TValue = unknown>({
         [meta.total, meta.per_page],
     );
     const [sorting, setSorting] = useState<SortingState>([]);
-
     const [isLoading, setIsLoading] = useState(false);
 
-    const { data: form, setData } = useForm<{
-        search: string;
-        filters: Record<string, string | number | null>;
-        page: number;
-    }>({
+    const { data: form, setData } = useForm({
         search: '',
-        filters: {},
+        filters: {} as Record<string, string | number | null>,
         page: meta.current_page,
     });
 
-    // Sync form state with URL params on mount
+    // Sync URL params with form on mount
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const searchParam = urlParams.get('search');
         const filters: Record<string, string | number | null> = {};
         urlParams.forEach((value, key) => {
             const match = key.match(/^filters\[(.+)\]$/);
-            if (match) {
-                filters[match[1]] = value;
-            }
+            if (match) filters[match[1]] = value;
         });
-        const hasSearch = !!searchParam && searchParam.length > 0;
-        const hasFilters = Object.keys(filters).length > 0;
-        if (hasSearch || hasFilters) {
+        if (
+            (searchParam && searchParam.length) ||
+            Object.keys(filters).length > 0
+        ) {
             setData((prev) => ({
                 ...prev,
-                search: searchParam || '',
-                filters: filters,
+                search: searchParam ?? '',
+                filters,
             }));
         }
     }, [setData]);
@@ -103,79 +97,47 @@ export function DataTable<TData, TValue = unknown>({
     const table = useReactTable({
         data,
         columns,
-        state: {
-            sorting,
-        },
+        state: { sorting },
         onSortingChange: setSorting,
-        getSortedRowModel: getSortedRowModel(),
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         manualPagination: true,
         pageCount,
-        meta: {
-            current_page: meta.current_page,
-            per_page: meta.per_page,
-        },
     });
 
-    // Pagination: use provided links URLs
-    const handlePageChangeByUrl = (url: string | null) => {
-        if (!url || isLoading) return;
+    // Centralized navigation (pagination, search, reset)
+    const navigate = (query: typeof form) => {
         setIsLoading(true);
-        router.get(
-            url,
-            {},
-            {
-                preserveState: true,
-                replace: true,
-                onFinish: () => setIsLoading(false),
-            },
-        );
+        router.get(route.url, query, {
+            preserveState: true,
+            replace: true,
+            onFinish: () => setIsLoading(false),
+        });
     };
 
-    // Search/filter submit: always reset to page 1
+    const handlePageChange = (page: number) => navigate({ ...form, page });
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
-        router.get(
-            route.url,
-            { ...form, page: 1 },
-            {
-                preserveState: true,
-                replace: true,
-                onFinish: () => setIsLoading(false),
-            },
-        );
+        navigate({ ...form, page: 1 });
     };
-
-    // Reset search & filters & page
     const handleReset = () => {
-        setIsLoading(true);
-        setData({
-            search: '',
-            filters: {},
-            page: 1,
-        });
-        router.get(
-            route.url,
-            { search: '', filters: {}, page: 1 },
-            {
-                preserveState: true,
-                replace: true,
-                onFinish: () => setIsLoading(false),
-            },
-        );
+        const reset = { search: '', filters: {}, page: 1 };
+        setData(reset);
+        navigate(reset);
     };
 
-    // Determine if Reset button should show
     const shouldShowReset =
         (!!form.search && form.search !== '') ||
         Object.values(form.filters ?? {}).some((v) => v !== null && v !== '');
 
+    // Calculate item range (not used currently)
+    // const startItem = (meta.current_page - 1) * meta.per_page + 1;
+    // const endItem = Math.min(meta.current_page * meta.per_page, meta.total);
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col justify-between gap-4 md:flex-row">
-                {/* Search & Filters */}
                 <form
                     onSubmit={handleSubmit}
                     className="flex flex-col gap-4 md:flex-row"
@@ -193,11 +155,7 @@ export function DataTable<TData, TValue = unknown>({
                             disabled={isLoading}
                         />
                     )}
-                    <Button
-                        type="submit"
-                        disabled={isLoading}
-                        variant="default"
-                    >
+                    <Button type="submit" disabled={isLoading}>
                         {isLoading ? (
                             <span className="flex items-center gap-2">
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -235,7 +193,8 @@ export function DataTable<TData, TValue = unknown>({
                     <div className="flex justify-end">{extraActions}</div>
                 )}
             </div>
-            {/* Table with overlay */}
+
+            {/* Table */}
             <div className="relative overflow-x-auto rounded-md border">
                 {isLoading && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm dark:bg-neutral-900/80">
@@ -247,17 +206,15 @@ export function DataTable<TData, TValue = unknown>({
                 )}
                 <Table className="table-auto">
                     <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
+                        {table.getHeaderGroups().map((group) => (
+                            <TableRow key={group.id}>
+                                {group.headers.map((header) => (
                                     <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
-                                                  header.getContext(),
-                                              )}
+                                        {!header.isPlaceholder &&
+                                            flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext(),
+                                            )}
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -301,7 +258,9 @@ export function DataTable<TData, TValue = unknown>({
                                     ? 'hidden'
                                     : 'cursor-pointer',
                             )}
-                            onClick={() => handlePageChangeByUrl(links.prev)}
+                            onClick={() =>
+                                handlePageChange(meta.current_page - 1)
+                            }
                         />
                     </PaginationItem>
                     <PaginationItem>
@@ -318,7 +277,9 @@ export function DataTable<TData, TValue = unknown>({
                                     ? 'hidden'
                                     : 'cursor-pointer',
                             )}
-                            onClick={() => handlePageChangeByUrl(links.next)}
+                            onClick={() =>
+                                handlePageChange(meta.current_page + 1)
+                            }
                         />
                     </PaginationItem>
                 </PaginationContent>

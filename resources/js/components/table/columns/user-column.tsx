@@ -5,20 +5,20 @@ import { StatusMap, User } from '@/types';
 import { Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 
-export const getUserColumns = (): ColumnDef<User>[] => [
+interface PaginationMeta {
+    current_page: number;
+    per_page: number;
+}
+
+export const getUserColumns = (meta: PaginationMeta): ColumnDef<User>[] => [
     {
         accessorKey: 'No',
         header: 'No',
-        cell: ({ row, table }) => {
-            const currentPage = table.options.meta?.current_page ?? 1;
-            const perPage = table.options.meta?.per_page ?? 10;
-            const number = (currentPage - 1) * perPage + (row.index + 1);
+        cell: ({ row }) => {
+            const number =
+                (meta.current_page - 1) * meta.per_page + (row.index + 1);
 
-            return (
-                <div className="flex items-center">
-                    <span>{number}</span>
-                </div>
-            );
+            return <div className="flex items-center">{number}</div>;
         },
     },
     {

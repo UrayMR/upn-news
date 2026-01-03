@@ -35,7 +35,7 @@ export default function UsersPage() {
                 <h2 className="mb-4 text-lg font-semibold">Daftar Pengguna</h2>
                 <DataTable<User>
                     route={users.index()}
-                    columns={getUserColumns()}
+                    columns={getUserColumns(props.payload.users.meta)}
                     data={props.payload.users.data}
                     meta={props.payload.users.meta}
                     links={props.payload.users.links}
