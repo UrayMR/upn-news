@@ -12,10 +12,10 @@ class IndexUserService extends UserService
     protected UserRepository $users
   ) {}
 
-  public function execute(array $filters = []): LengthAwarePaginator
+  public function execute(array $queryParams = []): LengthAwarePaginator
   {
     $this->assertAdminRole();
 
-    return $this->users->index($filters);
+    return $this->users->index($queryParams);
   }
 }

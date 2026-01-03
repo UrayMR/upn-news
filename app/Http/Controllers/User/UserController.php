@@ -31,18 +31,12 @@ class UserController extends Controller
   {
     $this->authorize('viewAny', User::class);
 
-    logger()->info('request', $request->all());
-
     $users = $this->indexUser->execute(
-      $request->only(
-        [
-          'search',
-          'name',
-          'email',
-          'role',
-          'status'
-        ]
-      )
+      $request->only([
+        'search',
+        'filters.role',
+        'filters.status',
+      ])
     );
 
     return $this->render('user/index', [

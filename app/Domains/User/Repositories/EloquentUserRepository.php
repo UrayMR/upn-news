@@ -11,17 +11,17 @@ use Illuminate\Support\Facades\Hash;
 class EloquentUserRepository implements UserRepository
 {
   /**
-   * @param array $filters (optional: ['search' => '', 'role' => '', 'status' => ''])
+   * @param array $queryParams (optional: ['search' => '', 'filters' => ['role' => '', 'status' => '']])
    * @param int $perPage (optional, default 15)
    * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
    */
-  public function index(array $filters = [], int $perPage = 15): LengthAwarePaginator
+  public function index(array $queryParams = [], int $perPage = 15): LengthAwarePaginator
   {
     $query = User::query();
 
     // Searching
-    if (!empty($filters['search'])) {
-      $search = $filters['search'];
+    if (!empty($queryParams['search'])) {
+      $search = $queryParams['search'];
       $query->where(function ($q) use ($search) {
         $q->where('name', 'like', "%$search%")
           ->orWhere('email', 'like', "%$search%")
@@ -31,13 +31,13 @@ class EloquentUserRepository implements UserRepository
     }
 
     // Filter by role
-    if (!empty($filters['role'])) {
-      $query->where('role', $filters['role']);
+    if (!empty($queryParams['filters']['role'])) {
+      $query->where('role', $queryParams['filters']['role']);
     }
 
     // Filter by status
-    if (!empty($filters['status'])) {
-      $query->where('status', $filters['status']);
+    if (!empty($queryParams['filters']['status'])) {
+      $query->where('status', $queryParams['filters']['status']);
     }
 
     return $query->orderByDesc('updated_at')->paginate($perPage);
