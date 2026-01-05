@@ -1,9 +1,11 @@
 import InputError from './input-error';
+import InputHint from './input-hint';
 import { Label } from './ui/label';
 
 type FormFieldProps = {
     name: string;
     label: string;
+    hint?: string;
     error?: string;
     required?: boolean;
     children: React.ReactNode;
@@ -13,6 +15,7 @@ export function FormField({
     name,
     label,
     error,
+    hint,
     required,
     children,
 }: FormFieldProps) {
@@ -25,7 +28,10 @@ export function FormField({
 
             {children}
 
-            <InputError message={error} />
+            <div className="space-y-0.5">
+                {hint && <InputHint hint={hint} />}
+                {error && <InputError message={error} />}
+            </div>
         </div>
     );
 }

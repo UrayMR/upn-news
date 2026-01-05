@@ -33,11 +33,11 @@ export interface IUserIndex {
 }
 
 export interface IUserShow extends IUserIndex {
-    email: string;
     phone_number?: string;
     profile_picture_path?: string;
     email_verified_at: string | null;
     updated_at: string;
+    created_at: string;
 }
 
 export interface IUserEdit extends IUserIndex {

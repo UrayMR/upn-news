@@ -4,58 +4,57 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {
-    Status,
+    IUserEdit,
     StatusValue,
-    UserRole,
     UserRoleValue,
     type BreadcrumbItem,
 } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-interface CreateUserForm {
+interface EditUserForm {
     name: string;
     email: string;
     phone_number?: string;
     role: UserRoleValue;
     status: StatusValue;
-    password: string;
-    password_confirmation: string;
+    password?: string;
+    password_confirmation?: string;
     profile_picture_file?: File | null;
+    profile_picture_path?: string;
 }
 
-export default function CreateUserPage() {
+export default function EditUserPage({ user }: { user: IUserEdit }) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Pengguna', href: users.index.url() },
-        { title: 'Tambah Pengguna', href: users.create.url() },
+        { title: 'Edit Pengguna', href: users.edit.url(user.id) },
     ];
 
-    const form = useForm<CreateUserForm>({
-        name: '',
-        email: '',
-        phone_number: '',
-        role: UserRole.Writer.value,
-        status: Status.Active.value,
+    const form = useForm<EditUserForm>({
+        name: user.name,
+        email: user.email,
+        phone_number: user.phone_number,
+        role: user.role,
+        status: user.status,
+        password: undefined,
+        password_confirmation: undefined,
         profile_picture_file: null,
-        password: '',
-        password_confirmation: '',
+        profile_picture_path: user.profile_picture_path ?? '',
     });
 
     // const { validate } = useZod(UserSchema);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        form.post(users.store.url());
+        form.put(users.update.url(user.id));
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Tambah Pengguna Baru" />
+            <Head title="Edit Pengguna" />
             <div className="flex flex-col gap-4 p-4">
                 <MainContent>
                     <div className="mb-5 flex items-center justify-between">
-                        <h2 className="text-2xl font-bold">
-                            Tambah Pengguna Baru
-                        </h2>
+                        <h2 className="text-2xl font-bold">Edit Pengguna</h2>
 
                         <Button variant="secondary" asChild>
                             <Link href={users.index.url()}>Kembali</Link>
@@ -64,7 +63,7 @@ export default function CreateUserPage() {
 
                     <form onSubmit={handleSubmit}>
                         <UserFormFields
-                            mode="create"
+                            mode="edit"
                             data={form.data}
                             errors={form.errors}
                             onChange={form.setData}

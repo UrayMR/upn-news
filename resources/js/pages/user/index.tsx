@@ -22,7 +22,7 @@ interface UsersPageProps {
     auth: Auth;
 }
 
-export default function UsersPage() {
+export default function IndexUserPage() {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Pengguna', href: users.index.url() },
     ];

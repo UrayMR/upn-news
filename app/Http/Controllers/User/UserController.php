@@ -74,8 +74,8 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
 
-        return Inertia::render('User/Show', [
-            'user' => ShowUserResource::make($user),
+        return Inertia::render('user/show', [
+            'user' => ShowUserResource::make($user)->resolve(),
         ]);
     }
 
@@ -86,8 +86,8 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        return Inertia::render('User/Edit', [
-            'user' => EditUserResource::make($user),
+        return Inertia::render('user/edit', [
+            'user' => EditUserResource::make($user)->resolve(),
         ]);
     }
 
