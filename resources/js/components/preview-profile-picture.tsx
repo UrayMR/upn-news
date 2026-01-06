@@ -1,19 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
+import { storageUrl } from '@/utils/storage';
 import React, { useEffect, useMemo } from 'react';
 
 interface PreviewProfilePictureProps {
     name: string;
     profilePictureFile?: File | null;
     profilePicturePath?: string;
-    createMode?: boolean;
 }
 
 export const PreviewProfilePicture: React.FC<PreviewProfilePictureProps> = ({
     name,
     profilePictureFile,
     profilePicturePath,
-    createMode = false,
 }) => {
     const getInitials = useInitials();
 
@@ -21,11 +20,11 @@ export const PreviewProfilePicture: React.FC<PreviewProfilePictureProps> = ({
         if (profilePictureFile instanceof File) {
             return URL.createObjectURL(profilePictureFile);
         }
-        if (!createMode && profilePicturePath) {
-            return profilePicturePath;
+        if (profilePicturePath) {
+            return storageUrl(profilePicturePath);
         }
         return null;
-    }, [profilePictureFile, profilePicturePath, createMode]);
+    }, [profilePictureFile, profilePicturePath]);
 
     useEffect(() => {
         return () => {
@@ -42,6 +41,7 @@ export const PreviewProfilePicture: React.FC<PreviewProfilePictureProps> = ({
                     src={previewUrl ?? undefined}
                     alt="Foto Profil"
                     className="object-cover"
+                    loading="lazy"
                 />
                 <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                     {getInitials(name)}

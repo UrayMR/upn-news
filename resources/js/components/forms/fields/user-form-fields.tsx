@@ -65,7 +65,6 @@ export function UserFormFields({
                         name={data.name}
                         profilePictureFile={data.profile_picture_file}
                         profilePicturePath={data.profile_picture_path}
-                        createMode={createMode}
                     />
 
                     {!showMode && (
