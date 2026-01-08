@@ -1,8 +1,9 @@
+import { DeleteDialogButton } from '@/components/buttons/delete-dialog-button';
+import { EditButton } from '@/components/buttons/edit-button';
+import { ShowButton } from '@/components/buttons/show-button';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import users from '@/routes/users';
 import { IUserIndex, StatusMap } from '@/types';
-import { Link } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 
 interface PaginationMeta {
@@ -71,27 +72,25 @@ export const getUserColumns = (
         cell: ({ row }) => {
             return (
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" asChild>
-                        <Link
-                            href={users.show.url({
-                                user: row.original.id,
-                            })}
-                        >
-                            Lihat
-                        </Link>
-                    </Button>
+                    <ShowButton
+                        href={users.show.url({
+                            user: row.original.id,
+                        })}
+                    />
 
-                    <Button variant="default" size="sm" asChild>
-                        <Link
-                            href={users.edit.url({
-                                user: row.original.id,
-                            })}
-                        >
-                            Ubah
-                        </Link>
-                    </Button>
+                    <EditButton
+                        href={users.edit.url({
+                            user: row.original.id,
+                        })}
+                    />
 
-                    {/* <DeleteUserDialog user={row.original} /> */}
+                    <DeleteDialogButton
+                        title="Hapus Pengguna"
+                        description={`Apakah Anda yakin ingin menghapus pengguna ${row.original.name}? Tindakan ini tidak dapat dibatalkan.`}
+                        url={users.destroy.url({
+                            user: row.original.id,
+                        })}
+                    />
                 </div>
             );
         },

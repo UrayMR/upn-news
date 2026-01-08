@@ -6,10 +6,7 @@ interface BackButtonProps {
     title?: string;
 }
 
-export const BackButton: React.FC<BackButtonProps> = ({
-    href,
-    title = 'Kembali',
-}) => {
+export const BackButton = ({ href, title = 'Kembali' }: BackButtonProps) => {
     return (
         <Button variant="secondary" asChild>
             <Link href={href}>{title}</Link>

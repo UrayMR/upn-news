@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Spinner } from './ui/spinner';
+import { Spinner } from '@/components/ui/spinner';
 
 interface SubmitButtonProps {
     loading?: boolean;
@@ -8,12 +8,12 @@ interface SubmitButtonProps {
     disabled?: boolean;
 }
 
-export const SubmitButton: React.FC<SubmitButtonProps> = ({
+export const SubmitButton = ({
     loading = false,
     label = 'Simpan',
     loadingLabel = 'Menyimpan...',
     disabled,
-}) => {
+}: SubmitButtonProps) => {
     return (
         <Button type="submit" disabled={loading || disabled}>
             {loading ? (

@@ -1,7 +1,7 @@
-import { BackButton } from '@/components/back-button';
+import { BackButton } from '@/components/buttons/back-button';
+import { SubmitButton } from '@/components/buttons/submit-button';
 import { UserFormFields } from '@/components/forms/fields/user-form-fields';
 import { MainContent } from '@/components/main-content';
-import { SubmitButton } from '@/components/submit-button';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {

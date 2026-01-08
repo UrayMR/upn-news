@@ -10,12 +10,12 @@ interface CreateButtonProps {
     disabled?: boolean;
 }
 
-export const CreateButton: React.FC<CreateButtonProps> = ({
+export const CreateButton = ({
     href,
     label = 'Tambah',
     icon = <Plus className="h-4 w-4" />,
     disabled = false,
-}) => {
+}: CreateButtonProps) => {
     return (
         <Button
             variant="default"

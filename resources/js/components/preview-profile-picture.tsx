@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { storageUrl } from '@/utils/storage';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 interface PreviewProfilePictureProps {
     name: string;
@@ -9,11 +9,11 @@ interface PreviewProfilePictureProps {
     profilePicturePath?: string;
 }
 
-export const PreviewProfilePicture: React.FC<PreviewProfilePictureProps> = ({
+export const PreviewProfilePicture = ({
     name,
     profilePictureFile,
     profilePicturePath,
-}) => {
+}: PreviewProfilePictureProps) => {
     const getInitials = useInitials();
 
     const previewUrl = useMemo(() => {

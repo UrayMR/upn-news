@@ -1,4 +1,4 @@
-import { BackButton } from '@/components/back-button';
+import { BackButton } from '@/components/buttons/back-button';
 import { UserFormFields } from '@/components/forms/fields/user-form-fields';
 import { MainContent } from '@/components/main-content';
 import AppLayout from '@/layouts/app-layout';

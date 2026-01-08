@@ -1,4 +1,4 @@
-import { CreateButton } from '@/components/create-button';
+import { CreateButton } from '@/components/buttons/create-button';
 import { DataTable } from '@/components/data-table';
 import { MainContent } from '@/components/main-content';
 import { getUserColumns } from '@/components/table/columns/user-column';
