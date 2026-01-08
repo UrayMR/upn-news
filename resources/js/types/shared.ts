@@ -8,7 +8,7 @@ export interface SharedData {
     };
     auth: Auth;
     sidebarOpen: boolean;
-    flashMessage?: FlashMessage;
+    flash?: FlashMessage;
 }
 
 export interface FlashMessage {

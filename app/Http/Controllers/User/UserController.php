@@ -64,7 +64,7 @@ class UserController extends Controller
 
         $user = $this->storeUser->execute($request->toDTO());
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return $this->response('users.index', 'Pengguna berhasil dibuat.');
     }
 
     /**
@@ -100,7 +100,7 @@ class UserController extends Controller
 
         $user = $this->updateUser->execute($request->toDTO(), $user);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return $this->response('users.index', 'Pengguna berhasil diupdate.');
     }
 
     /**
@@ -112,6 +112,6 @@ class UserController extends Controller
 
         $this->destroyUser->execute($user);
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return $this->response('users.index', 'Pengguna berhasil dihapus.');
     }
 }

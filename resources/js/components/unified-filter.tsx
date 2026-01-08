@@ -88,7 +88,7 @@ export function UnifiedFilter({
 
             {!disabled && (
                 <PopoverContent
-                    className="max-w-[var(--radix-popover-trigger-width)] p-0"
+                    className="max-w-(--radix-popover-trigger-width) p-0"
                     align="start"
                     sideOffset={4}
                 >
