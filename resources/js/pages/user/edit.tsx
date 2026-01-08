@@ -1,6 +1,7 @@
+import { BackButton } from '@/components/back-button';
 import { UserFormFields } from '@/components/forms/fields/user-form-fields';
-import MainContent from '@/components/main-content';
-import { Button } from '@/components/ui/button';
+import { MainContent } from '@/components/main-content';
+import { SubmitButton } from '@/components/submit-button';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {
@@ -9,7 +10,7 @@ import {
     UserRoleValue,
     type BreadcrumbItem,
 } from '@/types';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 
 interface EditUserForm {
     name: string;
@@ -53,28 +54,25 @@ export default function EditUserPage({ user }: { user: IUserEdit }) {
             <Head title="Edit Pengguna" />
             <div className="flex flex-col gap-4 p-4">
                 <MainContent>
-                    <div className="mb-5 flex items-center justify-between">
-                        <h2 className="text-2xl font-bold">Edit Pengguna</h2>
+                    <MainContent.Header
+                        title="Edit Pengguna"
+                        actions={<BackButton href={users.index.url()} />}
+                    />
 
-                        <Button variant="secondary" asChild>
-                            <Link href={users.index.url()}>Kembali</Link>
-                        </Button>
-                    </div>
+                    <MainContent.Section>
+                        <form onSubmit={handleSubmit}>
+                            <UserFormFields
+                                mode="edit"
+                                data={form.data}
+                                errors={form.errors}
+                                onChange={form.setData}
+                            />
 
-                    <form onSubmit={handleSubmit}>
-                        <UserFormFields
-                            mode="edit"
-                            data={form.data}
-                            errors={form.errors}
-                            onChange={form.setData}
-                        />
-
-                        <div className="mt-4 flex justify-end">
-                            <Button type="submit" disabled={form.processing}>
-                                {form.processing ? 'Menyimpan...' : 'Simpan'}
-                            </Button>
-                        </div>
-                    </form>
+                            <div className="mt-4 flex justify-end">
+                                <SubmitButton loading={form.processing} />
+                            </div>
+                        </form>
+                    </MainContent.Section>
                 </MainContent>
             </div>
         </AppLayout>

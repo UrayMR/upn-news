@@ -1,7 +1,7 @@
+import { CreateButton } from '@/components/create-button';
 import { DataTable } from '@/components/data-table';
-import MainContent from '@/components/main-content';
+import { MainContent } from '@/components/main-content';
 import { getUserColumns } from '@/components/table/columns/user-column';
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {
@@ -13,8 +13,7 @@ import {
     SearchParams,
     Status,
 } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { Plus } from 'lucide-react';
+import { Head, usePage } from '@inertiajs/react';
 
 interface UsersPageProps {
     users: DataTableProps<IUserIndex>;
@@ -32,38 +31,35 @@ export default function IndexUserPage() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Pengguna" />
             <MainContent>
-                <h2 className="mb-4 text-lg font-semibold">Daftar Pengguna</h2>
-                <DataTable<IUserIndex>
-                    route={users.index()}
-                    columns={getUserColumns(props.payload.users.meta)}
-                    data={props.payload.users.data}
-                    meta={props.payload.users.meta}
-                    links={props.payload.users.links}
-                    filtersSchema={[
-                        {
-                            key: 'status',
-                            label: 'Status',
-                            values: [
-                                {
-                                    label: Status.Active.label,
-                                    value: Status.Active.value,
-                                },
-                                {
-                                    label: Status.Inactive.label,
-                                    value: Status.Inactive.value,
-                                },
-                            ],
-                        },
-                    ]}
-                    extraActions={
-                        <Button variant="default" asChild>
-                            <Link href={users.create()}>
-                                <Plus />
-                                Tambah
-                            </Link>
-                        </Button>
-                    }
-                />
+                <MainContent.Header title="Daftar Pengguna" />
+                <MainContent.Section>
+                    <DataTable<IUserIndex>
+                        route={users.index()}
+                        columns={getUserColumns(props.payload.users.meta)}
+                        data={props.payload.users.data}
+                        meta={props.payload.users.meta}
+                        links={props.payload.users.links}
+                        filtersSchema={[
+                            {
+                                key: 'status',
+                                label: 'Status',
+                                values: [
+                                    {
+                                        label: Status.Active.label,
+                                        value: Status.Active.value,
+                                    },
+                                    {
+                                        label: Status.Inactive.label,
+                                        value: Status.Inactive.value,
+                                    },
+                                ],
+                            },
+                        ]}
+                        extraActions={
+                            <CreateButton href={users.create.url()} />
+                        }
+                    />
+                </MainContent.Section>
             </MainContent>
         </AppLayout>
     );

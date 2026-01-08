@@ -1,6 +1,7 @@
+import { BackButton } from '@/components/back-button';
 import { UserFormFields } from '@/components/forms/fields/user-form-fields';
-import MainContent from '@/components/main-content';
-import { Button } from '@/components/ui/button';
+import { MainContent } from '@/components/main-content';
+import { SubmitButton } from '@/components/submit-button';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {
@@ -10,7 +11,7 @@ import {
     UserRoleValue,
     type BreadcrumbItem,
 } from '@/types';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 
 interface CreateUserForm {
     name: string;
@@ -50,18 +51,13 @@ export default function CreateUserPage() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tambah Pengguna Baru" />
-            <div className="flex flex-col gap-4 p-4">
-                <MainContent>
-                    <div className="mb-5 flex items-center justify-between">
-                        <h2 className="text-2xl font-bold">
-                            Tambah Pengguna Baru
-                        </h2>
+            <MainContent>
+                <MainContent.Header
+                    title="Tambah Pengguna Baru"
+                    actions={<BackButton href={users.index.url()} />}
+                />
 
-                        <Button variant="secondary" asChild>
-                            <Link href={users.index.url()}>Kembali</Link>
-                        </Button>
-                    </div>
-
+                <MainContent.Section>
                     <form onSubmit={handleSubmit}>
                         <UserFormFields
                             mode="create"
@@ -71,13 +67,11 @@ export default function CreateUserPage() {
                         />
 
                         <div className="mt-4 flex justify-end">
-                            <Button type="submit" disabled={form.processing}>
-                                {form.processing ? 'Menyimpan...' : 'Simpan'}
-                            </Button>
+                            <SubmitButton loading={form.processing} />
                         </div>
                     </form>
-                </MainContent>
-            </div>
+                </MainContent.Section>
+            </MainContent>
         </AppLayout>
     );
 }

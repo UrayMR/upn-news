@@ -1,6 +1,6 @@
+import { BackButton } from '@/components/back-button';
 import { UserFormFields } from '@/components/forms/fields/user-form-fields';
-import MainContent from '@/components/main-content';
-import { Button } from '@/components/ui/button';
+import { MainContent } from '@/components/main-content';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {
@@ -9,7 +9,7 @@ import {
     UserRoleValue,
     type BreadcrumbItem,
 } from '@/types';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 
 interface ShowUserForm {
     name: string;
@@ -48,22 +48,20 @@ export default function ShowUserPage({ user }: { user: IUserShow }) {
             <Head title="Detail Pengguna" />
             <div className="flex flex-col gap-4 p-4">
                 <MainContent>
-                    <div className="mb-5 flex items-center justify-between">
-                        <h2 className="text-2xl font-bold">Detail Pengguna</h2>
-
-                        <Button variant="secondary" asChild>
-                            <Link href={users.index.url()}>Kembali</Link>
-                        </Button>
-                    </div>
-
-                    <form>
-                        <UserFormFields
-                            mode="show"
-                            data={form.data}
-                            errors={form.errors}
-                            onChange={form.setData}
-                        />
-                    </form>
+                    <MainContent.Header
+                        title="Detail Pengguna"
+                        actions={<BackButton href={users.index.url()} />}
+                    />
+                    <MainContent.Section>
+                        <form>
+                            <UserFormFields
+                                mode="show"
+                                data={form.data}
+                                errors={form.errors}
+                                onChange={form.setData}
+                            />
+                        </form>
+                    </MainContent.Section>
                 </MainContent>
             </div>
         </AppLayout>
