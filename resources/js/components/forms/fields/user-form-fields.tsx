@@ -9,41 +9,32 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Status, StatusValue, UserRole, UserRoleValue } from '@/types';
+import { FormProps } from '@/types/form';
 
 export type UserFormData = {
     name: string;
     email: string;
-    phone_number?: string;
+    phone_number?: string | null;
     role: UserRoleValue;
     status: StatusValue;
     password?: string;
     password_confirmation?: string;
     profile_picture_file?: File | null;
-    profile_picture_path?: string;
+    profile_picture_path?: string | null;
 };
 
-type Props = {
-    mode: 'create' | 'edit' | 'show';
-    data: UserFormData;
-    errors: Record<string, string | undefined>;
-    disabled?: boolean;
-    onChange: <K extends keyof UserFormData>(
-        key: K,
-        value: UserFormData[K],
-    ) => void;
-};
+type UserFormProps = FormProps<UserFormData>;
 
 export function UserFormFields({
     mode,
     data,
     errors,
-    disabled,
     onChange,
-}: Props) {
+}: UserFormProps) {
     const createMode = mode === 'create';
     const editMode = mode === 'edit';
     const showMode = mode === 'show';
-    const isReadOnly = showMode || disabled;
+    const isReadOnly = showMode;
 
     const isPasswordChanged =
         data.password !== undefined && data.password !== '';
@@ -95,19 +86,30 @@ export function UserFormFields({
                     type="text"
                     value={data.name}
                     onChange={(e) => onChange('name', e.target.value)}
-                    disabled={isReadOnly}
+                    readOnly={isReadOnly}
                     placeholder="Masukkan Nama Lengkap"
                     required
                 />
             </FormField>
 
-            <FormField name="email" label="Email" error={errors.email} required>
+            <FormField
+                name="email"
+                label="Email"
+                error={errors.email}
+                required
+                hint={
+                    editMode
+                        ? 'Email tidak dapat diubah setelah terdaftar.'
+                        : undefined
+                }
+            >
                 <Input
                     id="email"
                     type="email"
                     value={data.email}
                     onChange={(e) => onChange('email', e.target.value)}
-                    disabled={isReadOnly || editMode}
+                    disabled={editMode}
+                    readOnly={isReadOnly}
                     placeholder="Masukkan Email"
                     autoComplete="email"
                     required
@@ -123,7 +125,7 @@ export function UserFormFields({
                     id="phone_number"
                     value={data.phone_number ?? ''}
                     onChange={(e) => onChange('phone_number', e.target.value)}
-                    disabled={isReadOnly}
+                    readOnly={isReadOnly}
                     placeholder="Masukkan Nomor Telepon"
                 />
             </FormField>
@@ -139,7 +141,6 @@ export function UserFormFields({
                     onValueChange={(value) =>
                         onChange('role', value as UserRoleValue)
                     }
-                    disabled={isReadOnly}
                     required
                 >
                     <SelectTrigger>
@@ -148,7 +149,11 @@ export function UserFormFields({
 
                     <SelectContent>
                         {Object.values(UserRole).map((role) => (
-                            <SelectItem key={role.value} value={role.value}>
+                            <SelectItem
+                                key={role.value}
+                                value={role.value}
+                                disabled={isReadOnly}
+                            >
                                 {role.label}
                             </SelectItem>
                         ))}
@@ -167,7 +172,6 @@ export function UserFormFields({
                     onValueChange={(value) =>
                         onChange('status', value as StatusValue)
                     }
-                    disabled={isReadOnly}
                     required
                 >
                     <SelectTrigger>
@@ -176,7 +180,11 @@ export function UserFormFields({
 
                     <SelectContent>
                         {Object.values(Status).map((status) => (
-                            <SelectItem key={status.value} value={status.value}>
+                            <SelectItem
+                                key={status.value}
+                                value={status.value}
+                                disabled={isReadOnly}
+                            >
                                 {status.label}
                             </SelectItem>
                         ))}
@@ -199,7 +207,6 @@ export function UserFormFields({
                             onChange={(e) =>
                                 onChange('password', e.target.value)
                             }
-                            disabled={disabled}
                             placeholder={
                                 editMode
                                     ? 'Kosongkan jika tidak ingin mengubah password'
@@ -220,13 +227,13 @@ export function UserFormFields({
                             id="password_confirmation"
                             type="password"
                             value={data.password_confirmation ?? ''}
+                            disabled={!isPasswordChanged}
                             onChange={(e) =>
                                 onChange(
                                     'password_confirmation',
                                     e.target.value,
                                 )
                             }
-                            disabled={disabled}
                             placeholder={
                                 editMode
                                     ? 'Kosongkan jika tidak ingin mengubah password'

@@ -6,7 +6,7 @@ import { useEffect, useMemo } from 'react';
 interface PreviewProfilePictureProps {
     name: string;
     profilePictureFile?: File | null;
-    profilePicturePath?: string;
+    profilePicturePath?: string | null;
 }
 
 export const PreviewProfilePicture = ({
@@ -23,7 +23,7 @@ export const PreviewProfilePicture = ({
         if (profilePicturePath) {
             return storageUrl(profilePicturePath);
         }
-        return null;
+        return undefined;
     }, [profilePictureFile, profilePicturePath]);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ export const PreviewProfilePicture = ({
         <div className="my-3">
             <Avatar className="h-20 w-20 overflow-hidden rounded-full">
                 <AvatarImage
-                    src={previewUrl ?? undefined}
+                    src={previewUrl}
                     alt="Foto Profil"
                     className="object-cover"
                     loading="lazy"
