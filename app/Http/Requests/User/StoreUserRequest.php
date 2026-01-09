@@ -23,7 +23,7 @@ class StoreUserRequest extends FormRequest
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', Rule::in(UserRole::creatableByAdminValues())],
             'phone_number' => ['nullable', 'string', 'max:20'],
-            'profile_picture_file' => ['nullable', 'image', 'max:2048'],
+            'profile_picture_file' => ['nullable', 'image', 'max:2048'], // max 2MB
             'status' => ['required', 'string', Rule::in(UserStatus::values())],
         ];
     }

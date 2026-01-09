@@ -2,6 +2,7 @@ import { BackButton } from '@/components/buttons/back-button';
 import { SubmitButton } from '@/components/buttons/submit-button';
 import { UserFormFields } from '@/components/forms/fields/user-form-fields';
 import { MainContent } from '@/components/main-content';
+import { useZod } from '@/hooks/use-zod';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {
@@ -11,6 +12,7 @@ import {
     UserRoleValue,
     type BreadcrumbItem,
 } from '@/types';
+import { CreateUserSchema } from '@/validations/create-user-schema';
 import { Head, useForm } from '@inertiajs/react';
 
 interface CreateUserForm {
@@ -41,10 +43,20 @@ export default function CreateUserPage() {
         password_confirmation: '',
     });
 
-    // const { validate } = useZod(UserSchema);
+    const { validate } = useZod(CreateUserSchema);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        const errors = validate(form.data);
+
+        if (errors) {
+            Object.entries(errors).forEach(([field, message]) => {
+                form.setError(field as keyof CreateUserForm, message);
+            });
+            return;
+        }
+
         form.post(users.store.url());
     };
 
