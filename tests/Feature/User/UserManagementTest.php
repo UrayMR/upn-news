@@ -14,15 +14,34 @@ class UserManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_non_admin_cannot_access_user_management_routes()
+    {
+        foreach ($this->nonAdminRoles() as $role) {
+            $response = $this->actingAsRole($role)->get(route('users.index'));
+
+            $response->assertForbidden();
+        }
+    }
+
+    public function test_admin_can_view_user_index()
+    {
+        $response = $this->actingAsRole(UserRole::ADMIN)->get(route('users.index'));
+
+        $response->assertOk();
+    }
+
+    public function test_admin_can_view_create_user_form()
+    {
+        $response = $this->actingAsRole(UserRole::ADMIN)->get(route('users.create'));
+
+        $response->assertOk();
+    }
+
     public function test_admin_can_store_new_user()
     {
         Storage::fake('public');
 
-        $user = User::factory()->create([
-            'role' => UserRole::ADMIN->value,
-        ]);
-
-        $response = $this->actingAs($user)->post(route('users.store'), [
+        $response = $this->actingAsRole(UserRole::ADMIN)->post(route('users.store'), [
             'name' => 'New User',
             'email' => 'newuser@example.com',
             'password' => 'password123',
@@ -47,20 +66,40 @@ class UserManagementTest extends TestCase
         );
     }
 
-    public function test_admin_can_update_new_user()
+    public function test_admin_can_view_user_show()
+    {
+        $createdUser = User::factory()->create([
+            'role' => UserRole::WRITER->value,
+            'email' => 'newuser@example.com',
+        ]);
+
+        $response = $this->actingAsRole(UserRole::ADMIN)->get(route('users.show', $createdUser->id));
+
+        $response->assertOk();
+    }
+
+    public function test_admin_can_view_edit_user_form()
+    {
+        $createdUser = User::factory()->create([
+            'role' => UserRole::WRITER->value,
+            'email' => 'newuser@example.com',
+        ]);
+
+        $response = $this->actingAsRole(UserRole::ADMIN)->get(route('users.edit', $createdUser->id));
+
+        $response->assertOk();
+    }
+
+    public function test_admin_can_update_user()
     {
         Storage::fake('public');
-
-        $user = User::factory()->create([
-            'role' => UserRole::ADMIN->value,
-        ]);
 
         $createdUser = User::factory()->create([
             'role' => UserRole::WRITER->value,
             'email' => 'newuser@example.com',
         ]);
 
-        $response = $this->actingAs($user)->put(route('users.update', $createdUser->id), [
+        $response = $this->actingAsRole(UserRole::ADMIN)->put(route('users.update', $createdUser->id), [
             'name' => 'New User',
             'email' => 'newuser2@example.com',
             'password' => 'password123',
@@ -89,10 +128,6 @@ class UserManagementTest extends TestCase
     {
         Storage::fake('public');
 
-        $user = User::factory()->create([
-            'role' => UserRole::ADMIN->value,
-        ]);
-
         $createdUser = User::factory()->create([
             'role' => UserRole::WRITER->value,
             'email' => 'newuser@example.com',
@@ -100,7 +135,7 @@ class UserManagementTest extends TestCase
 
         $createdUserProfilePicturePath = $createdUser->profile_picture_path;
 
-        $response = $this->actingAs($user)->delete(route('users.destroy', $createdUser->id));
+        $response = $this->actingAsRole(UserRole::ADMIN)->delete(route('users.destroy', $createdUser->id));
 
         $response->assertRedirect(route('users.index'));
 
