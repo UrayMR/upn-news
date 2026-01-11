@@ -6,6 +6,7 @@ export * from './inertia';
 export * from './navigation';
 export * from './shared';
 
+export * from './entities/category';
 export * from './entities/user';
 
 export * from './enums/role';

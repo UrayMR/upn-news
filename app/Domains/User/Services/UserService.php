@@ -12,7 +12,6 @@ abstract class UserService
     /**
      * Assert that the authenticated user has admin role.
      *
-     *
      * @throws \DomainException
      */
     protected function assertAdminRole(): void
@@ -25,8 +24,6 @@ abstract class UserService
 
     /**
      * Assert that the given role is valid for assignment.
-     *
-     * @param  string  $role
      *
      * @throws \DomainException
      */

@@ -34,14 +34,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
-            'role' => fake()->randomElement([UserRole::ADMIN->value, UserRole::EDITOR->value, UserRole::WRITER->value]),
-            'phone_number' => fake()->phoneNumber(),
-            'profile_picture_path' => fake()->imageUrl(),
-            'status' => fake()->randomElement([UserStatus::ACTIVE->value, UserStatus::INACTIVE->value]),
+            'role' => $this->faker->randomElement([UserRole::ADMIN->value, UserRole::EDITOR->value, UserRole::WRITER->value]),
+            'phone_number' => $this->faker->phoneNumber(),
+            'profile_picture_path' => $this->faker->imageUrl(),
+            'status' => $this->faker->randomElement([UserStatus::ACTIVE->value, UserStatus::INACTIVE->value]),
             'remember_token' => Str::random(10),
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),
