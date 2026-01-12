@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Category;
 
-use App\Domains\News\DTOs\Category\UpdateCategoryDTO;
+use App\Domains\News\DTOs\Category\CategoryDTO;
 use App\Domains\News\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCategoryRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -24,11 +24,11 @@ class UpdateCategoryRequest extends FormRequest
     }
 
     /**
-     * Convert the request data to a UpdateCategoryDTO.
+     * Convert the request data to a StoreCategoryDTO.
      */
-    public function toDTO(): UpdateCategoryDTO
+    public function toDTO(): CategoryDTO
     {
-        return new UpdateCategoryDTO(
+        return new CategoryDTO(
             name: $this->input('name'),
             description: $this->input('description'),
             status: Status::from($this->input('status')),

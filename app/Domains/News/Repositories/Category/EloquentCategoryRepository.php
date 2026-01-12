@@ -2,8 +2,6 @@
 
 namespace App\Domains\News\Repositories\Category;
 
-use App\Domains\News\DTOs\Category\StoreCategoryDTO;
-use App\Domains\News\DTOs\Category\UpdateCategoryDTO;
 use App\Domains\News\Models\Category;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -35,29 +33,17 @@ class EloquentCategoryRepository implements CategoryRepository
         return $query->orderByDesc('updated_at')->paginate($perPage);
     }
 
-    public function store(StoreCategoryDTO $dto): Category
+    public function store(array $attributes): Category
     {
-        return Category::create([
-            'name' => $dto->name,
-            'slug' => $dto->slug,
-            'description' => $dto->description,
-            'status' => $dto->status,
-        ]);
+        return Category::create($attributes);
     }
 
     /**
      * @param  Category  $category  (to be updated)
      */
-    public function update(UpdateCategoryDTO $dto, Category $category): Category
+    public function update(array $attributes, Category $category): Category
     {
-        $data = [
-            'name' => $dto->name,
-            'slug' => $dto->slug,
-            'description' => $dto->description,
-            'status' => $dto->status,
-        ];
-
-        $category->update($data);
+        $category->update($attributes);
 
         return $category;
     }

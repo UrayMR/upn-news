@@ -2,61 +2,43 @@
 
 namespace App\Domains\News\Services\Category;
 
+use App\Domains\News\DTOs\Category\CategoryDTO;
+use App\Domains\News\Helpers\GenerateSlug;
 use App\Domains\News\Models\Category;
-use App\Domains\User\Enums\UserRole;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use App\Domains\News\Repositories\Category\CategoryRepository;
 
-abstract class CategoryService
+class CategoryService
 {
-    /**
-     * Assert that the authenticated user has admin role.
-     *
-     * @throws \DomainException
-     */
-    protected function assertAdminRole(): void
+    public function __construct(protected CategoryRepository $categories) {}
+
+    public function create(CategoryDTO $dto): Category
     {
-        $authenticatedUser = Auth::user();
-        if ($authenticatedUser->role !== UserRole::ADMIN) {
-            throw new \DomainException('Hanya Admin yang dapat melakukan aksi ini.');
-        }
+        $column = 'slug';
+        $slug = GenerateSlug::make($column, $dto->name);
+
+        return $this->categories->store(
+            [
+                'name' => $dto->name,
+                'slug' => $slug,
+                'description' => $dto->description,
+                'status' => $dto->status,
+            ]
+        );
     }
 
-    /**
-     * Assert that the category slug is null.
-     *
-     * @throws \DomainException
-     */
-    protected function assertCategorySlugIsNull(?string $slug): void
+    public function update(CategoryDTO $dto, Category $category): Category
     {
-        if ($slug !== null) {
-            throw new \DomainException('Slug tidak boleh diisi manual saat membuat atau mengupdate kategori.');
-        }
-    }
+        $column = 'slug';
+        $slug = GenerateSlug::make($column, $dto->name, $category->id);
 
-    /**
-     * Generate a unique slug for the category.
-     *
-     * @param  string  $name  The name of the category.
-     * @param  int|null  $ignoreId  The ID of the category to ignore when checking for uniqueness.
-     * @return string The unique slug for the category.
-     */
-    protected function generateCategorySlug(string $name, ?int $ignoreId = null): string
-    {
-        $base = Str::slug($name);
-        $slug = $base;
-        $counter = 1;
-
-        while (
-            Category::query()
-                ->where('slug', $slug)
-                ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
-                ->exists()
-        ) {
-            $slug = "{$base}-{$counter}";
-            $counter++;
-        }
-
-        return $slug;
+        return $this->categories->update(
+            [
+                'name' => $dto->name,
+                'slug' => $slug,
+                'description' => $dto->description,
+                'status' => $dto->status,
+            ],
+            $category
+        );
     }
 }

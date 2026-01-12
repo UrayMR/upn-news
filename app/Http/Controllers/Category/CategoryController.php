@@ -3,26 +3,20 @@
 namespace App\Http\Controllers\Category;
 
 use App\Domains\News\Models\Category;
+use App\Domains\News\Repositories\Category\CategoryRepository;
 use App\Domains\News\Resources\Category\EditCategoryResource;
 use App\Domains\News\Resources\Category\IndexCategoryResource;
 use App\Domains\News\Resources\Category\ShowCategoryResource;
-use App\Domains\News\Services\Category\DestroyCategoryService;
-use App\Domains\News\Services\Category\IndexCategoryService;
-use App\Domains\News\Services\Category\StoreCategoryService;
-use App\Domains\News\Services\Category\UpdateCategoryService;
+use App\Domains\News\Services\Category\CategoryService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\StoreCategoryRequest;
-use App\Http\Requests\Category\UpdateCategoryRequest;
+use App\Http\Requests\Category\CategoryRequest;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
     public function __construct(
-        protected IndexCategoryService $indexCategory,
-        protected StoreCategoryService $storeCategory,
-        protected UpdateCategoryService $updateCategory,
-        protected DestroyCategoryService $destroyCategory,
+        protected CategoryRepository $categories,
+        protected CategoryService $categoryService,
     ) {}
 
     /**
@@ -32,7 +26,7 @@ class CategoryController extends Controller
     {
         $this->authorize('viewAny', Category::class);
 
-        $categories = $this->indexCategory->execute(
+        $categories = $this->categories->index(
             $request->only([
                 'search',
                 'filters.status',
@@ -51,17 +45,17 @@ class CategoryController extends Controller
     {
         $this->authorize('create', Category::class);
 
-        return Inertia::render('category/create');
+        return $this->render('category/create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(CategoryRequest $request)
     {
         $this->authorize('create', Category::class);
 
-        $category = $this->storeCategory->execute($request->toDTO());
+        $category = $this->categoryService->create($request->toDTO());
 
         return $this->response('categories.index', 'Kategori berhasil dibuat.');
     }
@@ -73,7 +67,7 @@ class CategoryController extends Controller
     {
         $this->authorize('view', $category);
 
-        return Inertia::render('category/show', [
+        return $this->render('category/show', [
             'category' => ShowCategoryResource::make($category)->resolve(),
         ]);
     }
@@ -85,7 +79,7 @@ class CategoryController extends Controller
     {
         $this->authorize('update', $category);
 
-        return Inertia::render('category/edit', [
+        return $this->render('category/edit', [
             'category' => EditCategoryResource::make($category)->resolve(),
         ]);
     }
@@ -93,11 +87,11 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
         $this->authorize('update', $category);
 
-        $category = $this->updateCategory->execute($request->toDTO(), $category);
+        $category = $this->categoryService->update($request->toDTO(), $category);
 
         return $this->response('categories.index', 'Kategori berhasil diupdate.');
     }
@@ -109,7 +103,7 @@ class CategoryController extends Controller
     {
         $this->authorize('delete', $category);
 
-        $this->destroyCategory->execute($category);
+        $this->categories->destroy($category);
 
         return $this->response('categories.index', 'Kategori berhasil dihapus.');
     }
