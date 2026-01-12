@@ -2,8 +2,6 @@
 
 namespace App\Domains\User\Repositories;
 
-use App\Domains\User\DTOs\StoreUserDTO;
-use App\Domains\User\DTOs\UpdateUserDTO;
 use App\Domains\User\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
@@ -41,41 +39,30 @@ class EloquentUserRepository implements UserRepository
         return $query->orderByDesc('updated_at')->paginate($perPage);
     }
 
-    public function store(StoreUserDTO $dto, ?string $profilePath = null): User
+    public function store(array $attributes): User
     {
-        return User::create([
-            'name' => $dto->name,
-            'email' => $dto->email,
-            'password' => Hash::make($dto->password),
-            'role' => $dto->role,
-            'phone_number' => $dto->phone_number,
-            'profile_picture_path' => $profilePath,
-            'status' => $dto->status,
-        ]);
+        return User::create($attributes);
     }
 
     /**
      * @param  User  $user  (to be updated)
      */
-    public function update(UpdateUserDTO $dto, User $user, ?string $profilePath = null): User
+    public function update(array $attributes, User $user): User
     {
         $data = [
-            'name' => $dto->name,
-            'email' => $dto->email,
-            'role' => $dto->role,
-            'status' => $dto->status,
+            'name' => $attributes['name'],
+            'email' => $attributes['email'],
+            'phone_number' => $attributes['phone_number'],
+            'role' => $attributes['role'],
+            'status' => $attributes['status'],
         ];
 
-        if ($dto->password) {
-            $data['password'] = Hash::make($dto->password);
+        if (! empty($attributes['password'])) {
+            $data['password'] = Hash::make($attributes['password']);
         }
 
-        if (! is_null($dto->phone_number)) {
-            $data['phone_number'] = $dto->phone_number;
-        }
-
-        if (! is_null($profilePath)) {
-            $data['profile_picture_path'] = $profilePath;
+        if (! empty($attributes['profile_picture_path'])) {
+            $data['profile_picture_path'] = $attributes['profile_picture_path'];
         }
 
         $user->update($data);

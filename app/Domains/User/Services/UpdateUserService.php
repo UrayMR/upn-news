@@ -17,15 +17,26 @@ class UpdateUserService extends UserService
      */
     public function execute(UpdateUserDTO $dto, User $user): User
     {
-        $this->assertAdminRole();
-        $this->assertValidTargetRole($dto->role);
+        $attributes = [
+            'name' => $dto->name,
+            'email' => $dto->email,
+            'phone_number' => $dto->phone_number,
+            'role' => $dto->role,
+            'status' => $dto->status,
+        ];
 
-        $profilePath = $this->handleUploadProfilePicture($dto->profile_picture_file);
-
-        if ($profilePath) {
-            $this->handleDeleteProfilePicture($user->profile_picture_path);
+        if (! empty($dto->password)) {
+            $attributes['password'] = $dto->password;
         }
 
-        return $this->users->update($dto, $user, $profilePath);
+        if ($dto->profile_picture_file) {
+            $profilePath = $this->handleUploadProfilePicture($dto->profile_picture_file);
+
+            $this->handleDeleteProfilePicture($user->profile_picture_path);
+
+            $attributes['profile_picture_path'] = $profilePath;
+        }
+
+        return $this->users->update($attributes, $user);
     }
 }

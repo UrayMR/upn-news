@@ -3,23 +3,22 @@
 namespace App\Http\Controllers\User;
 
 use App\Domains\User\Models\User;
+use App\Domains\User\Repositories\UserRepository;
 use App\Domains\User\Resources\EditUserResource;
 use App\Domains\User\Resources\IndexUserResource;
 use App\Domains\User\Resources\ShowUserResource;
 use App\Domains\User\Services\DestroyUserService;
-use App\Domains\User\Services\IndexUserService;
 use App\Domains\User\Services\StoreUserService;
 use App\Domains\User\Services\UpdateUserService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class UserController extends Controller
 {
     public function __construct(
-        protected IndexUserService $indexUser,
+        protected UserRepository $users,
         protected StoreUserService $storeUser,
         protected UpdateUserService $updateUser,
         protected DestroyUserService $destroyUser,
@@ -32,7 +31,7 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = $this->indexUser->execute(
+        $users = $this->users->index(
             $request->only([
                 'search',
                 'filters.role',
@@ -52,7 +51,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        return Inertia::render('user/create');
+        return $this->render('user/create');
     }
 
     /**
@@ -62,7 +61,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        $user = $this->storeUser->execute($request->toDTO());
+        $this->storeUser->execute($request->toDTO());
 
         return $this->response('users.index', 'Pengguna berhasil dibuat.');
     }
@@ -74,7 +73,7 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
 
-        return Inertia::render('user/show', [
+        return $this->render('user/show', [
             'user' => ShowUserResource::make($user)->resolve(),
         ]);
     }
@@ -86,7 +85,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        return Inertia::render('user/edit', [
+        return $this->render('user/edit', [
             'user' => EditUserResource::make($user)->resolve(),
         ]);
     }
@@ -98,7 +97,7 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
-        $user = $this->updateUser->execute($request->toDTO(), $user);
+        $this->updateUser->execute($request->toDTO(), $user);
 
         return $this->response('users.index', 'Pengguna berhasil diupdate.');
     }

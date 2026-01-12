@@ -13,7 +13,6 @@ class DestroyUserService extends UserService
 
     public function execute(User $user): bool
     {
-        $this->assertAdminRole();
         $this->handleDeleteProfilePicture($user->profile_picture_path);
 
         return $this->users->destroy($user);

@@ -14,11 +14,16 @@ class StoreUserService extends UserService
 
     public function execute(StoreUserDTO $dto): User
     {
-        $this->assertAdminRole();
-        $this->assertValidTargetRole($dto->role);
-
         $profilePath = $this->handleUploadProfilePicture($dto->profile_picture_file);
 
-        return $this->users->store($dto, $profilePath);
+        return $this->users->store([
+            'name' => $dto->name,
+            'email' => $dto->email,
+            'password' => $dto->password,
+            'role' => $dto->role,
+            'phone_number' => $dto->phone_number,
+            'profile_picture_path' => $profilePath,
+            'status' => $dto->status,
+        ]);
     }
 }

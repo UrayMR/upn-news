@@ -55,7 +55,7 @@ class CategoryController extends Controller
     {
         $this->authorize('create', Category::class);
 
-        $category = $this->categoryService->create($request->toDTO());
+        $this->categoryService->create($request->toDTO());
 
         return $this->response('categories.index', 'Kategori berhasil dibuat.');
     }
@@ -91,7 +91,7 @@ class CategoryController extends Controller
     {
         $this->authorize('update', $category);
 
-        $category = $this->categoryService->update($request->toDTO(), $category);
+        $this->categoryService->update($request->toDTO(), $category);
 
         return $this->response('categories.index', 'Kategori berhasil diupdate.');
     }
