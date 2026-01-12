@@ -49,4 +49,12 @@ class Category extends Model
             'status' => Status::class,
         ];
     }
+
+    /**
+     * Get the news articles in the category.
+     */
+    public function news()
+    {
+        return $this->hasMany(News::class);
+    }
 }

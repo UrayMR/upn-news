@@ -4,6 +4,7 @@ namespace App\Domains\User\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Domains\News\Models\News;
 use App\Domains\User\Enums\UserRole;
 use App\Domains\User\Enums\UserStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -65,5 +66,13 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the news articles written by the user.
+     */
+    public function news()
+    {
+        return $this->hasMany(News::class);
     }
 }
