@@ -5,4 +5,5 @@ return [
     App\Providers\FortifyServiceProvider::class,
     App\Domains\User\Providers\UserServiceProvider::class,
     App\Domains\News\Providers\CategoryServiceProvider::class,
+    App\Domains\News\Providers\NewsServiceProvider::class,
 ];

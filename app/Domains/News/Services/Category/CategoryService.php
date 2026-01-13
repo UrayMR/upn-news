@@ -13,8 +13,7 @@ class CategoryService
 
     public function create(CategoryDTO $dto): Category
     {
-        $column = 'slug';
-        $slug = GenerateSlug::make($column, $dto->name);
+        $slug = GenerateSlug::make(Category::class, $dto->name);
 
         return $this->categories->store(
             [
@@ -28,17 +27,16 @@ class CategoryService
 
     public function update(CategoryDTO $dto, Category $category): Category
     {
-        $column = 'slug';
-        $slug = GenerateSlug::make($column, $dto->name, $category->id);
+        $attributes = [
+            'name' => $dto->name,
+            'description' => $dto->description,
+            'status' => $dto->status,
+        ];
 
-        return $this->categories->update(
-            [
-                'name' => $dto->name,
-                'slug' => $slug,
-                'description' => $dto->description,
-                'status' => $dto->status,
-            ],
-            $category
-        );
+        if ($dto->name !== $category->name) {
+            $attributes['slug'] = GenerateSlug::make(Category::class, $dto->name, $category->id);
+        }
+
+        return $this->categories->update($attributes, $category);
     }
 }

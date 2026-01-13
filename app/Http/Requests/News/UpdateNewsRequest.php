@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\News;
 
-use App\Domains\News\DTOs\News\NewsDTO;
+use App\Domains\News\DTOs\News\UpdateNewsDTO;
 use App\Domains\News\Enums\NewsStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class NewsRequest extends FormRequest
+class UpdateNewsRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -26,11 +26,11 @@ class NewsRequest extends FormRequest
     }
 
     /**
-     * Convert the request data to a NewsDTO.
+     * Convert the request data to a UpdateNewsDTO.
      */
-    public function toDTO(): NewsDTO
+    public function toDTO(): UpdateNewsDTO
     {
-        return new NewsDTO(
+        return new UpdateNewsDTO(
             category_id: $this->input('category_id'),
             title: $this->input('title'),
             content: $this->input('content'),
