@@ -2,7 +2,7 @@
 
 namespace App\Domains\News\Models;
 
-use App\Domains\News\Enums\Status;
+use App\Domains\News\Enums\NewsStatus;
 use App\Domains\User\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -55,7 +55,7 @@ class News extends Model
         return [
             'user_id' => 'string',
             'category_id' => 'string',
-            'status' => Status::class,
+            'status' => NewsStatus::class,
             'published_at' => 'datetime',
             'views' => 'integer',
         ];

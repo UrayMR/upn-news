@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Domains\News\Enums\Status;
+use App\Domains\News\Enums\NewsStatus;
 use App\Domains\News\Models\Category;
 use App\Domains\News\Models\News;
 use App\Domains\User\Models\User;
@@ -25,7 +25,7 @@ class NewsFactory extends Factory
             'content' => $this->faker->paragraphs(3, true),
             'image_path' => $this->faker->optional()->imageUrl(800, 600, 'news'),
             'views' => $this->faker->numberBetween(0, 10000),
-            'status' => $this->faker->randomElement(Status::values()),
+            'status' => $this->faker->randomElement(NewsStatus::values()),
             'published_at' => $this->faker->optional()->dateTimeBetween('-1 year', 'now'),
         ];
     }

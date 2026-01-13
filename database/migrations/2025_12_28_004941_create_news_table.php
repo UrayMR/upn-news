@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('content');
             $table->string('image_path')->nullable();
             $table->bigInteger('views')->default(0);
-            $table->string('status')->default('active'); // 'active', 'inactive'
+            $table->string('status')->default('active'); // 'published', 'inactive', 'draft'
             $table->dateTime('published_at')->nullable();
             $table->timestamps();
         });

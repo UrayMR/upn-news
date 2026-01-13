@@ -19,9 +19,7 @@ class EloquentCategoryRepository implements CategoryRepository
         if (! empty($queryParams['search'])) {
             $search = $queryParams['search'];
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                    ->orWhere('email', 'like', "%$search%")
-                    ->orWhere('phone_number', 'like', "%$search%");
+                $q->where('name', 'like', "%$search%");
             });
         }
 
