@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domains\News\Services;
+namespace App\Domains\News\Services\News;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

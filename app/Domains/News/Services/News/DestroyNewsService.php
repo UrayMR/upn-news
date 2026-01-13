@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domains\News\Services;
+namespace App\Domains\News\Services\News;
 
 use App\Domains\News\Models\News;
 use App\Domains\News\Repositories\News\NewsRepository;
