@@ -7,7 +7,9 @@ export * from './navigation';
 export * from './shared';
 
 export * from './entities/category';
+export * from './entities/news';
 export * from './entities/user';
 
+export * from './enums/news-status';
 export * from './enums/role';
 export * from './enums/status';

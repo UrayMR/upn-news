@@ -21,7 +21,7 @@ class IndexNewsResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'status' => $this->status,
-            'created_at' => $this->created_at->toDateTimeString(),
+            'published_at' => $this->published_at?->toDateTimeString(),
         ];
     }
 }
