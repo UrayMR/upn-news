@@ -12,10 +12,18 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import categories from '@/routes/categories';
+import news from '@/routes/news';
 import users from '@/routes/users';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Tag, Users } from 'lucide-react';
+import {
+    BookOpen,
+    Folder,
+    LayoutGrid,
+    Newspaper,
+    Tag,
+    Users,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -33,6 +41,11 @@ const mainNavItems: NavItem[] = [
         title: 'Kategori',
         href: categories.index(),
         icon: Tag,
+    },
+    {
+        title: 'Berita',
+        href: news.index(),
+        icon: Newspaper,
     },
 ];
 

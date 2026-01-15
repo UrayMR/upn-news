@@ -1,0 +1,10 @@
+have been do:
+- create page & form for news
+- component combobox
+- previewImage component (not clear)
+
+next :
+- make sure that when processing submit, the inputs are disabled (forms).. so refactor all of forms
+- complete previewImage
+- edit & show page
+

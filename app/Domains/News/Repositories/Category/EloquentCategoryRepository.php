@@ -53,4 +53,20 @@ class EloquentCategoryRepository implements CategoryRepository
     {
         return $category->delete();
     }
+
+    /**
+     * Get category options that returns an array of ['label' => '', 'value' => '']
+     */
+    public function getOptions(): array
+    {
+        return Category::query()
+            ->select('id', 'name')
+            ->orderByDesc('updated_at')
+            ->get()
+            ->map(fn ($category) => [
+                'label' => $category->name,
+                'value' => $category->id,
+            ])
+            ->toArray();
+    }
 }

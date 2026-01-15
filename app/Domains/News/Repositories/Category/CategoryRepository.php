@@ -14,4 +14,6 @@ interface CategoryRepository
     public function update(array $attributes, Category $category): Category;
 
     public function destroy(Category $category): bool;
+
+    public function getOptions(): array;
 }

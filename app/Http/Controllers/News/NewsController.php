@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\News;
 
 use App\Domains\News\Models\News;
+use App\Domains\News\Repositories\Category\CategoryRepository;
 use App\Domains\News\Repositories\News\NewsRepository;
 use App\Domains\News\Resources\News\EditNewsResource;
 use App\Domains\News\Resources\News\IndexNewsResource;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 class NewsController extends Controller
 {
     public function __construct(
+        protected CategoryRepository $category,
         protected NewsRepository $news,
         protected StoreNewsService $storeNews,
         protected UpdateNewsService $updateNews,
@@ -50,7 +52,11 @@ class NewsController extends Controller
     {
         $this->authorize('create', News::class);
 
-        return $this->render('news/create');
+        $categoryOptions = $this->category->getOptions();
+
+        return $this->render('news/create', [
+            'categoryOptions' => $categoryOptions,
+        ]);
     }
 
     /**
