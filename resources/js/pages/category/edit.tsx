@@ -5,21 +5,25 @@ import { MainContent } from '@/components/main-content';
 import { useZod } from '@/hooks/use-zod';
 import AppLayout from '@/layouts/app-layout';
 import categories from '@/routes/categories';
-import { ICategoryEdit, type BreadcrumbItem } from '@/types';
+import { AppProps, ICategoryEdit, type BreadcrumbItem } from '@/types';
 import {
     CategoryFormSchema,
     CategorySchema,
 } from '@/validations/category/category-schema';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function EditCategoryPage({
-    category,
-}: {
+interface EditCategoryPageProps {
     category: ICategoryEdit;
-}) {
+}
+
+export default function EditCategoryPage({
+    payload,
+}: AppProps<EditCategoryPageProps>) {
+    const { category } = payload;
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Kategori', href: categories.index.url() },
-        { title: 'Edit Kategori', href: categories.edit.url(category.id) },
+        { title: 'Edit Kategori', href: categories.edit.url(category.slug) },
     ];
 
     const form = useForm<CategoryFormSchema>({
@@ -37,7 +41,7 @@ export default function EditCategoryPage({
             return;
         }
 
-        form.put(categories.update.url(category.id));
+        form.put(categories.update.url(category.slug));
     };
 
     return (

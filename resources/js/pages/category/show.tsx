@@ -3,7 +3,12 @@ import { CategoryFormFields } from '@/components/forms/fields/category-form-fiel
 import { MainContent } from '@/components/main-content';
 import AppLayout from '@/layouts/app-layout';
 import categories from '@/routes/categories';
-import { ICategoryShow, StatusValue, type BreadcrumbItem } from '@/types';
+import {
+    AppProps,
+    ICategoryShow,
+    StatusValue,
+    type BreadcrumbItem,
+} from '@/types';
 import { Head } from '@inertiajs/react';
 
 interface ShowUserForm {
@@ -15,14 +20,18 @@ interface ShowUserForm {
     created_at: string;
 }
 
-export default function ShowCategoryPage({
-    category,
-}: {
+interface ShowCategoryPageProps {
     category: ICategoryShow;
-}) {
+}
+
+export default function ShowCategoryPage({
+    payload,
+}: AppProps<ShowCategoryPageProps>) {
+    const { category } = payload;
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Kategori', href: categories.index.url() },
-        { title: 'Detail Kategori', href: categories.show.url(category.id) },
+        { title: 'Detail Kategori', href: categories.show.url(category.slug) },
     ];
 
     const data: ShowUserForm = {

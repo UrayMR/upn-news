@@ -5,14 +5,20 @@ import { MainContent } from '@/components/main-content';
 import { useZod } from '@/hooks/use-zod';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
-import { IUserEdit, type BreadcrumbItem } from '@/types';
+import { AppProps, IUserEdit, type BreadcrumbItem } from '@/types';
 import {
     EditUserFormSchema,
     EditUserSchema,
 } from '@/validations/user/edit-user-schema';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function EditUserPage({ user }: { user: IUserEdit }) {
+interface EditUserPageProps {
+    user: IUserEdit;
+}
+
+export default function EditUserPage({ payload }: AppProps<EditUserPageProps>) {
+    const { user } = payload;
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Pengguna', href: users.index.url() },
         { title: 'Edit Pengguna', href: users.edit.url(user.id) },

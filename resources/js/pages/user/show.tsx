@@ -4,6 +4,7 @@ import { MainContent } from '@/components/main-content';
 import AppLayout from '@/layouts/app-layout';
 import users from '@/routes/users';
 import {
+    AppProps,
     IUserShow,
     StatusValue,
     UserRoleValue,
@@ -23,7 +24,13 @@ interface ShowUserForm {
     created_at: string;
 }
 
-export default function ShowUserPage({ user }: { user: IUserShow }) {
+interface ShowUserPageProps {
+    user: IUserShow;
+}
+
+export default function ShowUserPage({ payload }: AppProps<ShowUserPageProps>) {
+    const { user } = payload;
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Pengguna', href: users.index.url() },
         { title: 'Detail Pengguna', href: users.show.url(user.id) },
