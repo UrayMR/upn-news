@@ -3,6 +3,7 @@
 namespace App\Domains\News\Repositories\Category;
 
 use App\Domains\News\Models\Category;
+use App\Shared\DTOs\OptionDTO;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EloquentCategoryRepository implements CategoryRepository
@@ -63,10 +64,12 @@ class EloquentCategoryRepository implements CategoryRepository
             ->select('id', 'name')
             ->orderByDesc('updated_at')
             ->get()
-            ->map(fn ($category) => [
-                'label' => $category->name,
-                'value' => $category->id,
-            ])
+            ->map(
+                fn ($category) => OptionDTO::from(
+                    label: $category->name,
+                    value: $category->id,
+                )->toArray()
+            )
             ->toArray();
     }
 }
