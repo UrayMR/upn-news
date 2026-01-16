@@ -5,7 +5,7 @@ export const NewsSchema = z.object({
     category_id: z
         .string()
         .min(1, 'Kategori harus dipilih')
-        .max(1, 'Kategori tidak valid'),
+        .regex(/^\d+$/, 'Kategori tidak valid'),
 
     title: z
         .string()
@@ -25,6 +25,8 @@ export const NewsSchema = z.object({
         .min(1, 'Ukuran file minimal 1 byte')
         .max(2_048_000, 'Ukuran file maksimal 2MB')
         .nullable(),
+
+    image_path: z.string().readonly().optional(),
 
     status: z.enum(
         [

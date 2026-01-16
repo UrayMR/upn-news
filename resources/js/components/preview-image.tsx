@@ -14,7 +14,7 @@ export const PreviewImage = ({ imageFile, imagePath }: PreviewImageProps) => {
         if (imagePath) {
             return storageUrl(imagePath);
         }
-        return undefined;
+        return null;
     }, [imageFile, imagePath]);
 
     useEffect(() => {
@@ -24,6 +24,8 @@ export const PreviewImage = ({ imageFile, imagePath }: PreviewImageProps) => {
             }
         };
     }, [previewUrl]);
+
+    if (!previewUrl) return null;
 
     return (
         <div className="my-3">

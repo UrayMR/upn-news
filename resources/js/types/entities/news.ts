@@ -1,4 +1,5 @@
 import { NewsStatusValue } from '../enums/news-status';
+import { Relations } from '../global';
 
 export interface News {
     id: string;
@@ -17,8 +18,8 @@ export interface News {
 
 export interface INewsIndex {
     id: string;
-    category: string;
-    author: string;
+    category: Relations;
+    author: Relations;
     title: string;
     slug: string;
     status: NewsStatusValue;

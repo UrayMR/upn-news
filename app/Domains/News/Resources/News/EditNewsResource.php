@@ -16,8 +16,15 @@ class EditNewsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'category' => $this->category->name,
-            'author' => $this->user->name,
+            'category' => [
+                'id' => $this->category->id,
+                'name' => $this->category->name,
+            ],
+            'author' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+            ],
+            'slug' => $this->slug,
             'title' => $this->title,
             'content' => $this->content,
             'image_path' => $this->image_path,

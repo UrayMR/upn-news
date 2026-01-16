@@ -25,11 +25,11 @@ export const getNewsColumns = (
         },
     },
     {
-        accessorKey: 'category',
+        accessorKey: 'category.name',
         header: 'Kategori',
     },
     {
-        accessorKey: 'author',
+        accessorKey: 'author.name',
         header: 'Penulis',
     },
     {

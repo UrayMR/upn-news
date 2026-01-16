@@ -1,10 +1,10 @@
 have been do:
-- create page & form for news
-- component combobox
-- previewImage component (not clear)
+- previewImage done
+- Resource category missing slug fixed
+- Refactor resource news structure
+- Change how frontend getting datas from backend (edit and show pages); implementing contract
 
 next :
 - make sure that when processing submit, the inputs are disabled (forms).. so refactor all of forms
-- complete previewImage
-- edit & show page
+- show page
 

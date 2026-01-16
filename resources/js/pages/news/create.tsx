@@ -39,8 +39,6 @@ export default function CreateNewsPage() {
         form.post(news.store.url());
     };
 
-    console.log(form.data.category_id);
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tambah Berita Baru" />

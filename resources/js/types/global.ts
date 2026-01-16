@@ -8,3 +8,8 @@ export interface Option {
     label: string;
     value: string;
 }
+
+export interface Relations {
+    id: string;
+    name: string;
+}
