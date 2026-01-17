@@ -5,16 +5,17 @@ import { MainContent } from '@/components/main-content';
 import { useZod } from '@/hooks/use-zod';
 import AppLayout from '@/layouts/app-layout';
 import * as NewsRoutes from '@/routes/news';
-import { AppProps, INewsEdit, type BreadcrumbItem } from '@/types';
+import { AppProps, INewsEdit, Option, type BreadcrumbItem } from '@/types';
 import { NewsFormSchema, NewsSchema } from '@/validations/news/news-schema';
 import { Head, useForm } from '@inertiajs/react';
 
 interface EditNewsPageProps {
     news: INewsEdit;
+    categoryOptions: Option[];
 }
 
 export default function EditNewsPage({ payload }: AppProps<EditNewsPageProps>) {
-    const { news } = payload;
+    const { news, categoryOptions } = payload;
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Berita', href: NewsRoutes.index.url() },
@@ -29,6 +30,8 @@ export default function EditNewsPage({ payload }: AppProps<EditNewsPageProps>) {
         image_file: null,
         image_path: news.image_path ?? '',
     });
+
+    console.log(news);
 
     const { guard } = useZod<NewsFormSchema>(NewsSchema);
 
@@ -59,6 +62,7 @@ export default function EditNewsPage({ payload }: AppProps<EditNewsPageProps>) {
                                 data={form.data}
                                 errors={form.errors}
                                 onChange={form.setData}
+                                options={{ categoryOptions }}
                             />
 
                             <div className="mt-4 flex justify-end">

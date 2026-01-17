@@ -53,6 +53,7 @@ class News extends Model
     protected function casts(): array
     {
         return [
+            'id' => 'string',
             'user_id' => 'string',
             'category_id' => 'string',
             'status' => NewsStatus::class,

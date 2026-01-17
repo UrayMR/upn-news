@@ -3,8 +3,9 @@ have been do:
 - Resource category missing slug fixed
 - Refactor resource news structure
 - Change how frontend getting datas from backend (edit and show pages); implementing contract
+- show page
+- cast id to string in news and category models
 
 next :
 - make sure that when processing submit, the inputs are disabled (forms).. so refactor all of forms
-- show page
 

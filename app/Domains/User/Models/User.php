@@ -60,6 +60,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'id' => 'string',
             'role' => UserRole::class,
             'status' => UserStatus::class,
             'email_verified_at' => 'datetime',

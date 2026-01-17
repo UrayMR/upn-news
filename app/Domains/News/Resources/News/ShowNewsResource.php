@@ -16,8 +16,14 @@ class ShowNewsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'category' => $this->category->name,
-            'author' => $this->user->name,
+            'category' => [
+                'id' => $this->category->id,
+                'name' => $this->category->name,
+            ],
+            'author' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+            ],
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,

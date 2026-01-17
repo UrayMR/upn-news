@@ -90,8 +90,11 @@ class NewsController extends Controller
     {
         $this->authorize('update', $news);
 
+        $categoryOptions = $this->category->getOptions();
+
         return $this->render('news/edit', [
             'news' => EditNewsResource::make($news)->resolve(),
+            'categoryOptions' => $categoryOptions,
         ]);
     }
 

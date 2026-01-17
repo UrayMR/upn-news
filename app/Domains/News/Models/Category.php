@@ -46,6 +46,7 @@ class Category extends Model
     protected function casts(): array
     {
         return [
+            'id' => 'string',
             'status' => Status::class,
         ];
     }

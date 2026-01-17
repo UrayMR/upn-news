@@ -1,4 +1,5 @@
 import { ComboboxSelect } from '@/components/combobox-select';
+import DisplayInput from '@/components/display-input';
 import { FormField } from '@/components/form-field';
 import { PreviewImage } from '@/components/preview-image';
 import { Input } from '@/components/ui/input';
@@ -13,7 +14,9 @@ import { NewsStatus, NewsStatusValue } from '@/types/enums/news-status';
 import { FormProps } from '@/types/form';
 
 export type NewsFormData = {
+    author_name?: string;
     category_id: string;
+    category_name?: string;
     title: string;
     content: string;
     image_file?: File | null;
@@ -63,20 +66,38 @@ export function NewsFormFields({
                 </div>
             </FormField>
 
+            {isReadOnly && (
+                <FormField name="author" label="Penulis">
+                    <DisplayInput
+                        id="author"
+                        value={data.author_name ?? ''}
+                        readOnly
+                    />
+                </FormField>
+            )}
+
             <FormField
                 name="category"
                 label="Kategori"
                 error={errors.category_id}
                 required
             >
-                <ComboboxSelect
-                    items={options?.categoryOptions ?? []}
-                    value={data.category_id}
-                    onChange={(value) => onChange('category_id', value)}
-                    placeholder="Pilih Kategori"
-                    disabled={isReadOnly}
-                    required
-                />
+                {isReadOnly ? (
+                    <DisplayInput
+                        id="category"
+                        value={data.category_name ?? ''}
+                        readOnly
+                    />
+                ) : (
+                    <ComboboxSelect
+                        items={options?.categoryOptions ?? []}
+                        value={data.category_id}
+                        onChange={(value) => onChange('category_id', value)}
+                        placeholder="Pilih Kategori"
+                        disabled={isReadOnly}
+                        required
+                    />
+                )}
             </FormField>
 
             <FormField
